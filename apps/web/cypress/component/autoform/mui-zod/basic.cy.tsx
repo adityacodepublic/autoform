@@ -62,4 +62,35 @@ describe("AutoForm Basic Tests", () => {
       isStudent: true,
     });
   });
+
+  it("renders fields with default values", () => {
+    cy.mount(
+      <AutoForm
+        schema={schemaProvider}
+        onSubmit={cy.stub().as("onSubmit")}
+        defaultValues={{
+          name: "John Doe",
+          age: 25,
+          email: "john@example.com",
+          website: "https://example.com",
+          color: "green",
+          birthdate: "1990-01-01" as unknown as Date, 
+          isStudent: true,
+        }}
+        withSubmit
+      />
+    );
+
+    cy.get('button[type="submit"]').click();
+
+    cy.get("@onSubmit").should("have.been.calledWith", {
+      name: "John Doe",
+      age: 25,
+      email: "john@example.com",
+      website: "https://example.com",
+      color: "green",
+      birthdate: new Date("1990-01-01"),
+      isStudent: true,
+    });
+  });
 });

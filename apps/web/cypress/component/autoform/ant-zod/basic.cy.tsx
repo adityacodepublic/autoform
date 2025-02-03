@@ -48,7 +48,7 @@ describe("AutoForm Basic Tests", () => {
     cy.get('input[name="email"]').type("john@example.com");
     cy.get('input[name="website"]').type("https://example.com");
     cy.get('input[id="color"]').click();
-    cy.get('.ant-select-item-option[title="green"]').click();    
+    cy.get('.ant-select-item-option[title="green"]').click();
     cy.get('input[name="birthdate"]').clear().type("1990-01-01");
     cy.get('input[name="isStudent"]').check();
 
@@ -60,7 +60,38 @@ describe("AutoForm Basic Tests", () => {
       age: 25,
       email: "john@example.com",
       website: "https://example.com",
-      color:"green",
+      color: "green",
+      birthdate: new Date("1990-01-01"),
+      isStudent: true,
+    });
+  });
+
+  it("renders fields with default values", () => {
+    cy.mount(
+      <AutoForm
+        schema={schemaProvider}
+        onSubmit={cy.stub().as("onSubmit")}
+        defaultValues={{
+          name: "John Doe",
+          age: 25,
+          email: "john@example.com",
+          website: "https://example.com",
+          color: "green",
+          birthdate: "1990-01-01" as unknown as Date, 
+          isStudent: true,
+        }}
+        withSubmit
+      />
+    );
+
+    cy.get('button[type="submit"]').click();
+
+    cy.get("@onSubmit").should("have.been.calledWith", {
+      name: "John Doe",
+      age: 25,
+      email: "john@example.com",
+      website: "https://example.com",
+      color: "green",
       birthdate: new Date("1990-01-01"),
       isStudent: true,
     });
