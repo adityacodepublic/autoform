@@ -17,10 +17,17 @@ export const SelectField: React.FC<AutoFormFieldProps> = ({
 }) => {
   const { key, onChange, onBlur, ref, ...props } = inputProps;
   const { field: formField } = useController({ name: id });
-  
+
   return (
-    <Select onValueChange={formField.onChange} defaultValue={formField.value} {...props}>
-      <SelectTrigger className={error ? "border-destructive" : ""} {...formField}>
+    <Select
+      onValueChange={formField.onChange}
+      defaultValue={formField.value}
+      {...props}
+    >
+      <SelectTrigger
+        className={error ? "border-destructive" : ""}
+        {...formField}
+      >
         <SelectValue placeholder={props.placeholder ?? "Select an option"} />
       </SelectTrigger>
       <SelectContent>
