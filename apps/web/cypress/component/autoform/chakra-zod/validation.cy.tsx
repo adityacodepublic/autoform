@@ -55,4 +55,50 @@ describe("AutoForm Validation Tests", () => {
 
     cy.get("@onSubmit").should("have.been.calledOnce");
   });
+
+  it("focus fields on error", () => {
+    const onSubmit = cy.stub().as("onSubmit");
+
+    const basicSchema = z.object({
+      name: z.string().min(2, "Name must be at least 2 characters"),
+      age: z.coerce.number().min(18, "Must be at least 18 years old"),
+      isStudent: z.boolean({ message: "are you a student?" }),
+      address: z.object({
+        city: z.string().min(2, "City name must be at least 2 characters"),
+      }),
+    });
+    const newSchemaProvider = new ZodProvider(basicSchema);
+
+    cy.mount(
+      <AutoForm schema={newSchemaProvider} onSubmit={onSubmit} withSubmit />
+    );
+
+    cy.get('input[name="name"]').type("J");
+    cy.get('input[name="age"]').type("1");
+    cy.get('input[name="address.city"]').type("c");
+
+    // boolean field
+    cy.get('button[type="submit"]').click();
+    cy.get('input[name="isStudent"]').should("be.focused");
+    cy.get('input[name="isStudent"]').check({force:true});
+    // string field
+    cy.get('button[type="submit"]').click();
+    cy.contains("Name must be at least 2 characters").should("be.visible");
+    cy.get('input[name="name"]').should("be.focused");
+    cy.get('input[name="name"]').clear().type("John Doe");
+    // number field
+    cy.get('button[type="submit"]').click();
+    cy.contains("Must be at least 18 years old").should("be.visible");
+    cy.get('input[name="age"]').should("be.focused");
+    cy.get('input[name="age"]').clear().type("25");
+    // sub-object focus
+    cy.get('button[type="submit"]').click();
+    cy.contains("City name must be at least 2 characters").should("be.visible");
+    cy.get('input[name="address.city"]').should("be.focused");
+    cy.get('input[name="address.city"]').clear().type("John Doe");
+
+    cy.get('button[type="submit"]').click();
+    cy.get("@onSubmit").should("have.been.called");
+  });
+
 });
