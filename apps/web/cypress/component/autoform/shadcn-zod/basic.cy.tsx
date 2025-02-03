@@ -10,6 +10,7 @@ describe("AutoForm Basic Tests", () => {
     age: z.coerce.number().min(18, "Must be at least 18 years old"),
     email: z.string().email("Invalid email address"),
     website: z.string().url("Invalid URL").optional(),
+    color: z.enum(["red", "green", "blue"]),
     birthdate: z.coerce.date(),
     isStudent: z.boolean(),
   });
@@ -31,6 +32,7 @@ describe("AutoForm Basic Tests", () => {
     cy.get('input[name="age"]').should("have.attr", "type", "number");
     cy.get('input[name="email"]').should("exist");
     cy.get('input[name="website"]').should("exist");
+    cy.get('button[name="color"]').should("exist");
     cy.get('input[name="birthdate"]').should("exist");
     cy.get("button#isStudent").should("exist");
   });
@@ -47,6 +49,8 @@ describe("AutoForm Basic Tests", () => {
     cy.get('input[name="age"]').type("25");
     cy.get('input[name="email"]').type("john@example.com");
     cy.get('input[name="website"]').type("https://example.com");
+    cy.get('button[name="color"]').should("exist").click();
+    cy.get('div[data-radix-collection-item][role="option"]').should('be.visible').contains('green').click();
     cy.get('input[name="birthdate"]').type("1990-01-01");
     cy.get("button#isStudent").click();
 
@@ -58,8 +62,11 @@ describe("AutoForm Basic Tests", () => {
       age: 25,
       email: "john@example.com",
       website: "https://example.com",
+      color:"green",
       birthdate: new Date("1990-01-01"),
       isStudent: true,
     });
   });
 });
+
+
