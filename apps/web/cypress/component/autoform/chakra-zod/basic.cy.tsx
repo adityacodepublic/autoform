@@ -35,11 +35,7 @@ describe("AutoForm Basic Tests", () => {
     cy.get('input[name="website"]').should("exist");
     cy.get('select[name="color"]').should("exist");
     cy.get('input[name="birthdate"]');
-    cy.get('input[name="isStudent"]').should(
-      "have.attr",
-      "type",
-      "checkbox"
-    );
+    cy.get('input[name="isStudent"]').should("have.attr", "type", "checkbox");
   });
 
   it("submits form with correct data types", () => {
@@ -52,10 +48,17 @@ describe("AutoForm Basic Tests", () => {
     cy.get('input[name="age"]').type("25");
     cy.get('input[name="email"]').type("john@example.com");
     cy.get('input[name="website"]').type("https://example.com");
-    cy.get('.chakra-select__control[name="color"]').click();
+    cy.get(".chakra-select__root")
+      .within(() => {
+        cy.get('select[name="color"]').should("exist");
+      })
+      .click();
     cy.get('.chakra-select__item[data-value="green"]').click();
     cy.get('input[name="birthdate"]').clear().type("1990-01-01");
-    cy.get('input[name="isStudent"]').parent().find('.chakra-checkbox__control').click();
+    cy.get('input[name="isStudent"]')
+      .parent()
+      .find(".chakra-checkbox__control")
+      .click();
 
     cy.get('button[type="submit"]').click();
 
@@ -66,7 +69,7 @@ describe("AutoForm Basic Tests", () => {
       email: "john@example.com",
       website: "https://example.com",
       birthdate: new Date("1990-01-01"),
-      color:"green",
+      color: "green",
       isStudent: true,
     });
   });
@@ -82,7 +85,7 @@ describe("AutoForm Basic Tests", () => {
           email: "john@example.com",
           website: "https://example.com",
           color: "green",
-          birthdate: "1990-01-01" as unknown as Date, 
+          birthdate: "1990-01-01" as unknown as Date,
           isStudent: true,
         }}
         withSubmit
