@@ -49,7 +49,7 @@ describe("AutoForm Basic Tests", () => {
     cy.get('input[name="website"]').type("https://example.com");
     cy.get('input[id="color"]').click();
     cy.get('.ant-select-item-option[title="green"]').click();
-    cy.get('input[name="birthdate"]').clear().type("1990-01-01");
+    cy.get('input[name="birthdate"]').clear().type('1990-01-01{enter}');
     cy.get('input[name="isStudent"]').check();
 
     cy.get('button[type="submit"]').click();
