@@ -1,5 +1,6 @@
 import React from "react";
 import { Select } from "@mantine/core";
+import { useController } from "react-hook-form";
 import { AutoFormFieldProps } from "@autoform/react";
 
 export const SelectField: React.FC<AutoFormFieldProps> = ({
@@ -10,27 +11,19 @@ export const SelectField: React.FC<AutoFormFieldProps> = ({
   id,
   value,
 }) => {
-  const { key, ...props } = inputProps;
+  const { key, onChange, onBlur, ref, ...props } = inputProps;
+  const { field: formField } = useController({ name: id });
 
   return (
     <Select
       key={key}
       {...props}
+      {...formField}
       label={label}
       error={error}
-      onChange={(value) => {
-        const event = {
-          target: {
-            name: field.key,
-            value: value,
-          },
-        };
-        props.onChange(event);
-      }}
-      defaultValue={value}
       description={field.fieldConfig?.description}
       data={(field.options || []).map(([key, label]) => ({
-        value: key,
+        value: label,
         label,
       }))}
     />
