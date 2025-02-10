@@ -1,6 +1,6 @@
 import React from "react";
+import { AutoForm } from "@autoform/shadcn/components/ui/autoform/AutoForm";
 import { fieldConfig, ZodProvider } from "@autoform/zod";
-import { AutoForm } from "@autoform/mantine";
 import HookTest from "components/Hook-test";
 import { TestWrapper } from "./utils";
 import { z } from "zod";
@@ -27,30 +27,28 @@ describe("React-Hook-Form useForm properties Tests", () => {
 
   const TestForm = () => {
     return (
-      <AutoForm
-        schema={schemaProvider}
-        onSubmit={cy.stub().as("onSubmit")}
-        formComponents={{
-          custom: HookTest,
-        }}
-        defaultValues={{
-          name: undefined,
-          age: undefined,
-          color: undefined,
-          birthdate: undefined,
-          isStudent: false,
-        }}
-        withSubmit
-      />
+      <TestWrapper>
+        <AutoForm
+          schema={schemaProvider}
+          onSubmit={cy.stub().as("onSubmit")}
+          formComponents={{
+            custom: HookTest,
+          }}
+          defaultValues={{
+            name: undefined,
+            age: undefined,
+            color: undefined,
+            birthdate: undefined,
+            isStudent: false,
+          }}
+          withSubmit
+        />
+      </TestWrapper>
     );
   };
 
   it("checks useForm properties", () => {
-    cy.mount(
-      <TestWrapper>
-        <TestForm />
-      </TestWrapper>
-    );
+    cy.mount(<TestForm />);
 
     // formState before changes.
     cy.get('button[name="dirtyFields"]')
@@ -66,18 +64,17 @@ describe("React-Hook-Form useForm properties Tests", () => {
       .click()
       .should("have.attr", "data-item", "false");
 
-    // type values
+    // type and then check state
     cy.get('input[name="name"]').type("John Doe");
     cy.get('input[name="age"]').type("25");
-    cy.get('input[name="isStudent"]').check();
-    cy.get('[data-dates-input="true"]').clear().type("1990-01-01{enter}");
-    cy.get(".mantine-Select-input").eq(0).click();
-    cy.get('.mantine-Select-option[value="green"]')
-      .should("exist")
-      .and("be.visible")
+    cy.get("button#isStudent").click();
+    cy.get('input[name="birthdate"]').clear().type("1990-01-01"); // or click
+    cy.get('button[name="color"]').should("exist").click();
+    cy.get('div[data-radix-collection-item][role="option"]')
+      .should("be.visible")
+      .contains("green")
       .click();
 
-    // check formState
     cy.get('button[name="dirtyFields"]')
       .click()
       .should("have.attr", "data-item", "true");
@@ -87,12 +84,13 @@ describe("React-Hook-Form useForm properties Tests", () => {
     cy.get('button[name="isValid"]')
       .click()
       .should("have.attr", "data-item", "true");
+
     cy.get('button[type="submit"]').click();
     cy.get('button[name="isSubmitSuccessful"]')
       .click()
       .should("have.attr", "data-item", "true");
 
-    cy.get("@onSubmit").should("have.been.called");
+    cy.get("@onSubmit").should("have.been.calledOnce");
     cy.get("@onSubmit").should("have.been.calledWith", {
       name: "John Doe",
       age: 25,
