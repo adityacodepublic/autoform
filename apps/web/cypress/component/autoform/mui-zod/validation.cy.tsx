@@ -76,6 +76,7 @@ describe("AutoForm Validation Tests", () => {
     cy.get('input[name="name"]').type("J");
     cy.get('input[name="age"]').type("1");
     cy.get('input[name="address.city"]').type("c");
+    cy.get('input[name="isStudent"]').check();
 
     // string field
     cy.get('button[type="submit"]').click();
