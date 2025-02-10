@@ -6,13 +6,17 @@ export const DateField: React.FC<AutoFormFieldProps> = ({
   inputProps,
   error,
   label,
-}) => (
-  <TextField
-    type="date"
-    error={!!error}
-    fullWidth
-    label={label}
-    InputLabelProps={{ shrink: true }}
-    {...inputProps}
-  />
-);
+}) => {
+  const { key, ...props } = inputProps;
+
+  return (
+    <TextField
+      type="date"
+      error={!!error}
+      fullWidth
+      label={label}
+      InputLabelProps={{ shrink: true }}
+      {...props}
+    />
+  );
+};

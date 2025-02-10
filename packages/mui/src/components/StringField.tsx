@@ -6,4 +6,8 @@ export const StringField: React.FC<AutoFormFieldProps> = ({
   error,
   id,
   inputProps,
-}) => <Input id={id} error={!!error} fullWidth {...inputProps} />;
+}) => {
+  const { key, ...props } = inputProps;
+
+  return <Input id={id} error={!!error} fullWidth {...props} />;
+};

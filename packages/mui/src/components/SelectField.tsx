@@ -5,14 +5,19 @@ import { AutoFormFieldProps } from "@autoform/react";
 
 export const SelectField: React.FC<AutoFormFieldProps> = ({
   field,
+  value,
   inputProps,
   error,
-}) => (
-  <Select error={!!error} fullWidth {...inputProps}>
-    {(field.options || []).map(([key, label]) => (
-      <MenuItem key={key} value={label}>
-        {label}
-      </MenuItem>
-    ))}
-  </Select>
-);
+}) => {
+  const { key, ...props } = inputProps;
+
+  return (
+    <Select error={!!error} fullWidth {...props} defaultValue={value}>
+      {(field.options || []).map(([key, label]) => (
+        <MenuItem key={key} value={label}>
+          {label}
+        </MenuItem>
+      ))}
+    </Select>
+  );
+};
