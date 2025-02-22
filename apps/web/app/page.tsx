@@ -1,10 +1,10 @@
 "use client";
 import { Card, CardContent, Container, Typography } from "@mui/material";
 // import Ant from "../components/Ant";
-// import Array from "components/Array";
-// import Basics from "../components/Basics";
 import Chakra from "components/Chakra";
 // import Mantine from "components/Mantine";
+// import Array from "components/Array";
+// import Basics from "../components/Basics";
 
 export default function Home() {
   return (
@@ -20,7 +20,7 @@ export default function Home() {
             {/* <Mantine /> */}
             {/* <Shadcn /> */}
             {/* <Ant /> */}
-            <Chakra/>
+            <Chakra />
           </CardContent>
         </Card>
       </Container>

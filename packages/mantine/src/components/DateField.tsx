@@ -21,7 +21,9 @@ export const DateField: React.FC<AutoFormFieldProps> = ({
       error={inputProps.error}
       description={field.fieldConfig?.description}
       value={formField.value ? new Date(formField.value) : undefined}
-      onChange={(value) => formField.onChange(value?.toLocaleDateString("en-CA"))}
+      onChange={(value) =>
+        formField.onChange(value?.toLocaleDateString("en-CA"))
+      }
     />
   );
 };
