@@ -21,7 +21,7 @@ export const SelectField: React.FC<AutoFormFieldProps> = ({
   return (
     <Select
       onValueChange={formField.onChange}
-      defaultValue={formField.value}
+      value={formField.value}
       {...props}
     >
       <SelectTrigger
