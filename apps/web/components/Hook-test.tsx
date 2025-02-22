@@ -16,7 +16,7 @@ const HookTest = () => {
     setValue,
   } = useFormContext();
 
-  const buttons: React.CSSProperties = {
+  const buttonStyle: React.CSSProperties = {
     border: "1px solid black",
     borderRadius: "25px",
     padding: "5px 10px",
@@ -35,9 +35,16 @@ const HookTest = () => {
     setValue: "initial",
   };
   const [test, setTest] = useState<typeof tests>(tests);
-  const formFields = ["birthdate", "color", "name", "isStudent"] as const;
+  const formFields = [
+    "name",
+    "age",
+    "color",
+    "birthdate",
+    "isStudent",
+  ] as const;
 
-  // functions to test useForm-properties  
+  // ------------------------------------
+  // functions to test useForm-properties
   function checkDirtyFields() {
     console.log("dirtyFields", dirtyFields);
     setTest((prev) => ({
@@ -75,7 +82,7 @@ const HookTest = () => {
   function checkWatch() {
     const result = {
       name: "John Doe",
-      age: 25,
+      age: "25",
       color: "green",
       birthdate: "1990-01-01",
       isStudent: true,
@@ -83,11 +90,16 @@ const HookTest = () => {
 
     const watchValues = watch();
     console.log("checkWatch", watchValues);
-    
+
     setTest((prev) => ({
       ...prev,
       watch: String(
-        formFields.every((key) => watchValues[key] === result[key])
+        formFields.every((key) => {
+          if (key === "age") {
+            return String(watchValues[key]) === String(result[key]); // watch can return number or string
+          }
+          return watchValues[key] === result[key];
+        })
       ),
     }));
   }
@@ -104,7 +116,7 @@ const HookTest = () => {
 
     const watchValues = watch();
     console.log("checkClear", watchValues);
-    
+
     setTest((prev) => ({
       ...prev,
       clear: String(
@@ -126,14 +138,14 @@ const HookTest = () => {
     const result = {
       name: "John Doe",
       age: 25,
-      color: "green",
+      color: "blue",
       birthdate: "1990-01-01",
       isStudent: true,
     };
 
     setValue("name", "John Doe");
     setValue("age", 25);
-    setValue("color", "green");
+    setValue("color", "blue");
     setValue("birthdate", "1990-01-01");
     setValue("isStudent", true);
     const watchValues = watch();
@@ -150,7 +162,7 @@ const HookTest = () => {
     <div>
       <button
         type="button"
-        style={buttons}
+        style={buttonStyle}
         name="dirtyFields"
         onClick={checkDirtyFields}
         data-item={test.dirtyFields}
@@ -159,7 +171,7 @@ const HookTest = () => {
       </button>
       <button
         type="button"
-        style={buttons}
+        style={buttonStyle}
         name="touchedFields"
         onClick={checkTouchedFields}
         data-item={test.touchedFields}
@@ -168,7 +180,7 @@ const HookTest = () => {
       </button>
       <button
         type="button"
-        style={buttons}
+        style={buttonStyle}
         name="isValid"
         onClick={checkIsValid}
         data-item={test.isValid}
@@ -177,7 +189,7 @@ const HookTest = () => {
       </button>
       <button
         type="button"
-        style={buttons}
+        style={buttonStyle}
         name="isSubmitSuccessful"
         onClick={checkIsSubmitSuccessful}
         data-item={test.isSubmitSuccessful}
@@ -186,7 +198,7 @@ const HookTest = () => {
       </button>
       <button
         type="button"
-        style={buttons}
+        style={buttonStyle}
         name="watch"
         onClick={checkWatch}
         data-item={test.watch}
@@ -195,7 +207,7 @@ const HookTest = () => {
       </button>
       <button
         type="button"
-        style={buttons}
+        style={buttonStyle}
         name="clear"
         onClick={checkClear}
         data-item={test.clear}
@@ -204,7 +216,7 @@ const HookTest = () => {
       </button>
       <button
         type="button"
-        style={buttons}
+        style={buttonStyle}
         name="trigger"
         onClick={checkTrigger}
         data-item={test.trigger}
@@ -213,7 +225,7 @@ const HookTest = () => {
       </button>
       <button
         type="button"
-        style={buttons}
+        style={buttonStyle}
         name="setValue"
         onClick={checkSetValue}
         data-item={test.setValue}

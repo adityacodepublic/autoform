@@ -83,10 +83,14 @@ describe("React-Hook-Form useForm properties Tests", () => {
       .should("have.attr", "data-item", "true");
 
     cy.get('button[type="submit"]').click();
-    cy.get('button[name="isSubmitSuccessful"]')
-      .click()
-      .should("have.attr", "data-item", "true");
-
+    cy.get("@onSubmit").should("have.been.calledWith", {
+      name: "John Doe",
+      age: 25,
+      color: "green",
+      birthdate: new Date("1990-01-01"),
+      isStudent: true,
+    });
+    
     // check watch
     cy.get('button[name="watch"]')
       .click()
@@ -97,8 +101,10 @@ describe("React-Hook-Form useForm properties Tests", () => {
       .click()
       .should("have.attr", "data-item", "true");
 
-    // check trigger - wont work as Select & BooleanField are controlled
-
+    // check trigger - empty fields
+    cy.get('button[name="trigger"]')
+      .click()
+      .should("have.attr", "data-item", "true");
 
     // check setValue
     cy.get('button[name="setValue"]')
