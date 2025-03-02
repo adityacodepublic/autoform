@@ -7,6 +7,8 @@ import { AutoFormFieldProps } from "@autoform/react";
 export const BooleanField: React.FC<AutoFormFieldProps> = ({
   id,
   label,
+  field,
+  error,
   inputProps,
 }) => {
   const { key, onChange, onBlur, ref, ...props } = inputProps;
@@ -19,7 +21,14 @@ export const BooleanField: React.FC<AutoFormFieldProps> = ({
       {...formField}
       checked={formField.value}
       control={<Checkbox />}
-      label={label}
+      label={
+        <span style={{ lineHeight: "16px", cursor: "pointer" }}>
+          {label}
+          {field.required && (
+            <span style={{ color: "red", opacity: 0.8 }}> * </span>
+          )}
+        </span>
+      }
     />
   );
 };

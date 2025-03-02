@@ -26,9 +26,14 @@ export const BooleanField: React.FC<AutoFormFieldProps> = ({
       <span style={{ lineHeight: "16px", cursor: "pointer" }}>
         {label}
         {field.required && (
-          <span style={{ color: "red", opacity: 0.8 }}> *</span>
+          <span style={{ color: "red", opacity: 0.8 }}> * </span>
         )}
-        {error}
+        <br />
+        {error && (
+          <span style={{ color: "red", opacity: 0.8, fontSize: "12.2px" }}>
+            {error}
+          </span>
+        )}
       </span>
     </Checkbox>
   );

@@ -87,7 +87,6 @@ const zodFormSchema = z.object({
     .describe("Accept terms and conditions.")
     .refine((value) => value, {
       message: "You must accept the terms and conditions.",
-      path: ["acceptTerms"],
     }),
   sendMeMails: z
     .boolean()
