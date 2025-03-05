@@ -9,7 +9,6 @@ export const BooleanField: React.FC<AutoFormFieldProps> = ({
   inputProps,
 }) => {
   const { key, ...props } = inputProps;
-  console.log("errors", error);
   return (
     <Checkbox
       {...props}

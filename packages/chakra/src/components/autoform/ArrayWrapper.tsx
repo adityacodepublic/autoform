@@ -1,10 +1,12 @@
 import React from "react";
 import { ArrayWrapperProps } from "@autoform/react";
-import { Button, Heading, Stack } from "@chakra-ui/react";
+import { Button, Heading, Stack, Text } from "@chakra-ui/react";
 import { FiPlus } from "react-icons/fi";
 
 export const ArrayWrapper: React.FC<ArrayWrapperProps> = ({
   label,
+  field,
+  error,
   children,
   onAddItem,
 }) => {
@@ -12,11 +14,28 @@ export const ArrayWrapper: React.FC<ArrayWrapperProps> = ({
     <Stack w={"full"} marginBottom={6}>
       <Heading size={"md"} fontWeight={"medium"}>
         {label}
+        {field.required && (
+          <span style={{ color: "red", opacity: 0.8 }}> * </span>
+        )}
       </Heading>
+      {error && (
+        <Text textStyle={"xs"} fontWeight={"medium"} color={"red.500"}>
+          {error}
+        </Text>
+      )}
       {children}
-      <Button onClick={onAddItem} variant="surface" rounded="md" type="button" name="add-array-item">
-        <FiPlus style={{ height: 22, width: 22 }} />
-      </Button>
+      <div>
+        <Button
+          name="add-array-item"
+          onClick={onAddItem}
+          variant={"surface"}
+          type="button"
+          rounded="md"
+          px={10}
+        >
+          <FiPlus />
+        </Button>
+      </div>
     </Stack>
   );
 };
