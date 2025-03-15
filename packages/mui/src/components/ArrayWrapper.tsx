@@ -8,9 +8,9 @@ import { ArrayWrapperProps } from "@autoform/react";
 export const ArrayWrapper: React.FC<ArrayWrapperProps> = ({
   label,
   field,
-  error,
   children,
   onAddItem,
+  inputProps,
 }) => {
   return (
     <Box sx={{ mt: 2 }}>
@@ -21,7 +21,7 @@ export const ArrayWrapper: React.FC<ArrayWrapperProps> = ({
         )}
       </Typography>
       {children}
-      <Button onClick={onAddItem} variant="outlined" sx={{ mt: 1 }}>
+      <Button onClick={onAddItem} variant="outlined" sx={{ mt: 1 }} {...inputProps}>
         <AddIcon />
       </Button>
     </Box>

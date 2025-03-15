@@ -1,20 +1,22 @@
 import React from "react";
+import { getLabel, ParsedField } from "@autoform/core";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { AutoFormField } from "./AutoFormField";
 import { useAutoForm } from "./context";
-import { getLabel, ParsedField } from "@autoform/core";
 
 export const ArrayField: React.FC<{
   field: ParsedField;
   path: string[];
-}> = ({ field, path }) => {
+  inputProps: any;
+}> = ({ field, path, inputProps }) => {
   const { uiComponents } = useAutoForm();
   const { control } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     control,
     name: path.join("."),
   });
-
+  
+  const { key, onChange, onBlur, ...props} = inputProps;
   const subFieldType = field.schema?.[0]?.type;
   let defaultValue: any;
   if (subFieldType === "object") {
@@ -27,8 +29,9 @@ export const ArrayField: React.FC<{
 
   return (
     <uiComponents.ArrayWrapper
-      label={getLabel(field)}
       field={field}
+      inputProps={props}
+      label={getLabel(field)}
       onAddItem={() => append(defaultValue)}
     >
       {fields.map((item, index) => (

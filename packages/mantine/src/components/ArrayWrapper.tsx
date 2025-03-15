@@ -5,10 +5,10 @@ import { ArrayWrapperProps } from "@autoform/react";
 
 export const ArrayWrapper: React.FC<ArrayWrapperProps> = ({
   label,
-  error,
   field,
   children,
   onAddItem,
+  inputProps,
 }) => {
   return (
     <Box mt="md">
@@ -18,13 +18,18 @@ export const ArrayWrapper: React.FC<ArrayWrapperProps> = ({
           <span style={{ color: "red", opacity: 0.8 }}> * </span>
         )}
       </Text>
-      {error && (
+      {inputProps.error && (
         <Text size="xs" c="red.6" mb="-5px">
-          {error}
+          {inputProps.error}
         </Text>
       )}
       {children}
-      <Button onClick={onAddItem} mt="sm" data-testid="add-item-button">
+      <Button
+        {...inputProps}
+        mt="sm"
+        onClick={onAddItem}
+        data-testid="add-item-button"
+      >
         <IconPlus size={19} />
       </Button>
     </Box>

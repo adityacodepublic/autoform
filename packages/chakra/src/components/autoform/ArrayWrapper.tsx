@@ -6,9 +6,9 @@ import { FiPlus } from "react-icons/fi";
 export const ArrayWrapper: React.FC<ArrayWrapperProps> = ({
   label,
   field,
-  error,
   children,
   onAddItem,
+  inputProps,
 }) => {
   return (
     <Stack w={"full"} marginBottom={6}>
@@ -18,14 +18,15 @@ export const ArrayWrapper: React.FC<ArrayWrapperProps> = ({
           <span style={{ color: "red", opacity: 0.8 }}> * </span>
         )}
       </Heading>
-      {error && (
+      {inputProps.error && (
         <Text textStyle={"xs"} fontWeight={"medium"} color={"red.500"}>
-          {error}
+          {inputProps.error}
         </Text>
       )}
       {children}
       <div>
         <Button
+          {...inputProps}
           name="add-array-item"
           onClick={onAddItem}
           variant={"surface"}
