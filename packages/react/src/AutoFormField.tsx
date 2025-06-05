@@ -57,7 +57,6 @@ export const AutoFormField: React.FC<{
         key={fullPath}
         path={path}
         inputProps={{
-          required: field.required,
           error: error,
           key: `${fullPath}-input`,
           ...field.fieldConfig?.inputProps,

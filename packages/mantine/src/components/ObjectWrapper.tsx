@@ -8,7 +8,7 @@ export const ObjectWrapper: React.FC<ObjectWrapperProps> = ({
 }) => {
   return (
     <Box mt="md">
-      <Title order={4}>{label}</Title>
+      <Title order={5} style={{marginTop: '25px'}}>{label}</Title>
       {children}
     </Box>
   );

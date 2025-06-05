@@ -22,8 +22,10 @@ export const ArrayElementWrapper: React.FC<ArrayElementWrapperProps> = ({
         color="red"
         variant="subtle"
         data-testid="remove-item-button"
+        size={30}
+        mb={5}
       >
-        <IconTrash size={16} />
+        <IconTrash size={19} />
       </ActionIcon>
       {children}
     </Box>

@@ -14,6 +14,7 @@ export const NumberField: React.FC<AutoFormFieldProps> = ({
       key={key}
       type="number"
       label={label}
+      withAsterisk={field.required}
       description={field.fieldConfig?.description}
       {...props}
     />

@@ -15,6 +15,7 @@ export const StringField: React.FC<AutoFormFieldProps> = ({
       id={id}
       key={key}
       label={label}
+      withAsterisk={field.required}
       description={field.fieldConfig?.description}
       {...props}
     />

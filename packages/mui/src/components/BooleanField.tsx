@@ -1,9 +1,33 @@
 import React from "react";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
+import { useController } from "react-hook-form";
 import { AutoFormFieldProps } from "@autoform/react";
+import { Checkbox, FormControlLabel, FormHelperText } from "@mui/material";
 
 export const BooleanField: React.FC<AutoFormFieldProps> = ({
+  id,
   label,
+  field,
+  error,
   inputProps,
-}) => <FormControlLabel control={<Checkbox {...inputProps} />} label={label} />;
+}) => {
+  const { key, ref, onChange, onBlur, ...props } = inputProps;
+  const { field: formField } = useController({ name: id, defaultValue: false });
+
+  return (
+    <>
+      <FormControlLabel
+        key={key}
+        {...props}
+        {...formField}
+        label={
+          <span style={{ color: error && "#d32f2f", opacity: 0.8 }}>
+            {label} {field.required && " *"}
+          </span>
+        }
+        checked={formField.value}
+        control={<Checkbox />}
+      />
+      {error && <FormHelperText>{error}</FormHelperText>}
+    </>
+  );
+};
