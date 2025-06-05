@@ -37,7 +37,7 @@ export const SelectField: React.FC<AutoFormFieldProps> = ({
       onBlur={formField.onBlur}
       collection={options}
     >
-      <SelectTrigger>
+      <SelectTrigger ref={formField.ref}>
         <SelectValueText
           placeholder={props.placeholder ?? "Select an option"}
         />

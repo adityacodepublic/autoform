@@ -27,7 +27,9 @@ export const FieldWrapper: React.FC<FieldWrapperProps> = ({
           {field.fieldConfig.description}
         </p>
       )}
-      {error && <p className="text-sm text-destructive">{error}</p>}
+      {!isDisabled && error && (
+        <p className="text-sm text-destructive">{error}</p>
+      )}
     </div>
   );
 };

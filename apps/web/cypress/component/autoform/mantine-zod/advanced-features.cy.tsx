@@ -21,6 +21,7 @@ describe("AutoForm Advanced Features Tests (MANTINE-ZOD)", () => {
     password: z
       .string()
       .min(8, "Password must be at least 8 characters")
+      .describe("Create a password")
       .superRefine(
         fieldConfig({
           description: "Use a strong password",
@@ -34,6 +35,10 @@ describe("AutoForm Advanced Features Tests (MANTINE-ZOD)", () => {
       fieldConfig({
         fieldType: "select",
         order: 3,
+        label: "Your favourite color",
+        inputProps: {
+          placeholder: "select one color",
+        },
       })
     ),
     bio: z
@@ -92,6 +97,21 @@ describe("AutoForm Advanced Features Tests (MANTINE-ZOD)", () => {
     cy.contains("Use a strong password").should("be.visible");
   });
 
+  it("displays field labels", () => {
+    cy.mount(
+      <TestWrapper>
+        <AutoForm
+          schema={schemaProvider}
+          onSubmit={cy.stub().as("onSubmit")}
+          withSubmit
+        />
+      </TestWrapper>
+    );
+
+    cy.contains("Create a password").should("be.visible");
+    cy.contains("Your favourite color").should("be.visible");
+  });
+
   it("applies custom input props", () => {
     cy.mount(
       <TestWrapper>
@@ -108,6 +128,7 @@ describe("AutoForm Advanced Features Tests (MANTINE-ZOD)", () => {
       "placeholder",
       "Enter username"
     );
+    cy.get('input[placeholder="select one color"]').should("exist");
     cy.get('input[name="password"]').should("have.attr", "type", "password");
   });
 
@@ -144,5 +165,64 @@ describe("AutoForm Advanced Features Tests (MANTINE-ZOD)", () => {
     );
 
     cy.get('input[name="bio"]').should("exist");
+  });
+
+  it("applies disabled input prop", () => {
+    const newSchema = z.object({
+      name: z.string().superRefine(
+        fieldConfig({
+          inputProps: {
+            disabled: true,
+          },
+        })
+      ),
+      age: z.coerce.number().superRefine(
+        fieldConfig({
+          inputProps: {
+            disabled: true,
+          },
+        })
+      ),
+      color: z.enum(["red", "green", "blue"]).superRefine(
+        fieldConfig({
+          inputProps: {
+            disabled: true,
+          },
+        })
+      ),
+      birthdate: z.coerce.date().superRefine(
+        fieldConfig({
+          inputProps: {
+            disabled: true,
+          },
+        })
+      ),
+      isStudent: z.boolean().superRefine(
+        fieldConfig({
+          inputProps: {
+            disabled: true,
+          },
+        })
+      ),
+    });
+    const newSchemaProvider = new ZodProvider(newSchema);
+
+    cy.mount(
+      <TestWrapper>
+        <AutoForm
+          schema={newSchemaProvider}
+          onSubmit={cy.stub().as("onSubmit")}
+          withSubmit
+        />
+      </TestWrapper>
+    );
+
+    cy.get('input[name="name"]').should("be.disabled");
+    cy.get('input[name="age"]').should("be.disabled");
+    cy.get(".mantine-Select-input").eq(0).should("be.disabled");
+    cy.get('input.mantine-DateInput-input[data-disabled="true"]').should(
+      "be.disabled"
+    );
+    cy.get('input[name="isStudent"]').should("be.disabled");
   });
 });
