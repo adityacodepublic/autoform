@@ -22,12 +22,12 @@ export const FieldWrapper: React.FC<FieldWrapperProps> = ({
       error={!!error}
       required={field.required}
     >
-      {isDisabled ? null : <InputLabel htmlFor={id}>{label}</InputLabel>}
+      {!isDisabled && <InputLabel htmlFor={id}>{label}</InputLabel>}
       {children}
       {field.fieldConfig?.description && (
         <FormHelperText>{field.fieldConfig.description}</FormHelperText>
       )}
-      {error && <FormHelperText>{error}</FormHelperText>}
+      {!isDisabled && error && <FormHelperText>{error}</FormHelperText>}
     </FormControl>
   );
 };

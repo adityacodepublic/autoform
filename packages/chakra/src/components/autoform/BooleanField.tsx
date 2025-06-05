@@ -19,6 +19,7 @@ export const BooleanField: React.FC<AutoFormFieldProps> = ({
       key={key}
       {...props}
       {...formField}
+      invalid={!!error}
       checked={formField.value}
       onCheckedChange={({ checked }) => formField.onChange(checked)}
       style={{ display: "flex", marginTop: "15px", marginBottom: "5px" }}
@@ -28,7 +29,12 @@ export const BooleanField: React.FC<AutoFormFieldProps> = ({
         {field.required && (
           <span style={{ color: "red", opacity: 0.8 }}> *</span>
         )}
-        {error}
+        <br />
+        {error && (
+          <span style={{ color: "red", opacity: 0.8, fontSize: "12.2px" }}>
+            {error}
+          </span>
+        )}
       </span>
     </Checkbox>
   );

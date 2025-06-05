@@ -1,5 +1,5 @@
 import { ObjectWrapperProps } from "@autoform/react";
-import { Form, Typography } from "antd";
+import { Typography } from "antd";
 import React from "react";
 
 export const ObjectWrapper: React.FC<ObjectWrapperProps> = ({
@@ -7,14 +7,9 @@ export const ObjectWrapper: React.FC<ObjectWrapperProps> = ({
   children,
 }) => {
   return (
-    <Form.Item
-      label={<Typography.Title level={4}>{label}</Typography.Title>}
-      labelCol={{
-        span: 24,
-        style: { fontWeight: "600" },
-      }}
-    >
+    <div>
+      <Typography.Title level={5} style={{ marginTop: '40px', marginBottom:'15px'}}>{label}</Typography.Title>
       {children}
-    </Form.Item>
+    </div>
   );
 };
