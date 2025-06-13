@@ -18,6 +18,7 @@ export const BooleanField: React.FC<AutoFormFieldProps> = ({
       {...props}
       {...formField}
       checked={formField.value}
+      description={field.fieldConfig?.description}
       label={
         <span style={{ lineHeight: "16px", cursor: "pointer" }}>
           {label}
