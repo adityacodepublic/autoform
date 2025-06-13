@@ -14,44 +14,56 @@ export const BooleanField: React.FC<AutoFormFieldProps> = ({
   const { field: formField } = useController({ name: id });
 
   return (
-    <Checkbox
-      id={id}
-      key={key}
-      {...props}
-      {...formField}
-      checked={formField.value}
-      onChange={(e) => {
-        formField.onChange(e.target.checked);
-      }}
-      style={{
-        display: "flex",
-        marginTop: "15px",
-        marginBottom: "5px",
-      }}
-    >
-      <label
-        htmlFor={id}
+    <>
+      <Checkbox
+        id={id}
+        key={key}
+        {...props}
+        {...formField}
+        checked={formField.value}
+        onChange={(e) => {
+          formField.onChange(e.target.checked);
+        }}
         style={{
-          lineHeight: "17px",
-          cursor: "pointer",
-          fontWeight: "500",
+          display: "flex",
+          marginTop: "15px",
+          marginBottom: "5px",
         }}
       >
-        {field.required && (
-          <span style={{ color: "red", fontSize: "19px", opacity: "0.75" }}>
-            {" "}
-            *{" "}
-          </span>
-        )}
-        {label}
-        <br />
-        <Typography.Text
-          type="danger"
-          style={{ marginTop: "10px", fontWeight: "normal" }}
+        <label
+          htmlFor={id}
+          style={{
+            lineHeight: "17px",
+            cursor: "pointer",
+            fontWeight: "500",
+          }}
         >
-          {error}
-        </Typography.Text>
-      </label>
-    </Checkbox>
+          {field.required && (
+            <span style={{ color: "red", fontSize: "19px", opacity: "0.75" }}>
+              {" "}
+              *{" "}
+            </span>
+          )}
+          {label}
+        </label>
+      </Checkbox>
+      {field.fieldConfig?.description && (
+        <>
+          <Typography.Text
+            type="secondary"
+            style={{ marginTop: "10px", fontWeight: "normal" }}
+          >
+            {field.fieldConfig?.description || " "}
+          </Typography.Text>
+          <br />
+        </>
+      )}
+      <Typography.Text
+        type="danger"
+        style={{ marginTop: "10px", fontWeight: "normal" }}
+      >
+        {error}
+      </Typography.Text>
+    </>
   );
 };
