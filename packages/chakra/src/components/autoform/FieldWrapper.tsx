@@ -5,10 +5,11 @@ import { FieldWrapperProps } from "@autoform/react";
 const DISABLED_LABELS = ["boolean", "object", "array"];
 
 export const FieldWrapper: React.FC<FieldWrapperProps> = ({
+  id,
   label,
   error,
-  children,
   field,
+  children,
 }) => {
   const isDisabled = DISABLED_LABELS.includes(field.type);
 
@@ -16,15 +17,17 @@ export const FieldWrapper: React.FC<FieldWrapperProps> = ({
     <Field
       label={
         !isDisabled && (
-          <span>
+          <label htmlFor={id}>
             {label}
-            {field.required && <span style={{color:"red", opacity:0.8}}> *</span>}
-          </span>
+            {field.required && (
+              <span style={{ color: "red", opacity: 0.8 }}> *</span>
+            )}
+          </label>
         )
       }
       helperText={field.fieldConfig?.description}
       errorText={!isDisabled ? error : undefined}
-      marginY={!isDisabled ? 6: undefined}
+      marginY={!isDisabled ? 6 : undefined}
     >
       {children}
     </Field>
