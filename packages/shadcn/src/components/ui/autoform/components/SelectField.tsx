@@ -25,8 +25,9 @@ export const SelectField: React.FC<AutoFormFieldProps> = ({
       {...props}
     >
       <SelectTrigger
-        className={error ? "border-destructive" : ""}
+        id={id}
         {...formField}
+        className={error ? "border-destructive" : ""}
       >
         <SelectValue placeholder={props.placeholder ?? "Select an option"} />
       </SelectTrigger>

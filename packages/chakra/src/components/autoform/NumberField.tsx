@@ -21,7 +21,7 @@ export const NumberField: React.FC<AutoFormFieldProps> = ({
       }}
       w={"full"}
     >
-      <NumberInputField {...props} />
+      <NumberInputField id={id} {...props} />
     </NumberInputRoot>
   );
 };
