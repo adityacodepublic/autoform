@@ -9,7 +9,7 @@ describe("AutoForm Basic Tests", () => {
     age: Yup.number().min(18, "Must be at least 18 years old"),
     email: Yup.string().email("Invalid email address"),
     website: Yup.string().url("Invalid URL").optional(),
-    color: Yup.mixed().oneOf(["red","green","blue"]),
+    color: Yup.mixed().oneOf(["red", "green", "blue"]),
     birthdate: Yup.date(),
     isStudent: Yup.boolean(),
   });
@@ -44,7 +44,7 @@ describe("AutoForm Basic Tests", () => {
     cy.get('input[name="age"]').type("25");
     cy.get('input[name="email"]').type("john@example.com");
     cy.get('input[name="website"]').type("https://example.com");
-    cy.get('.MuiSelect-select[aria-labelledby="mui-component-select-color"]').click();
+    cy.get('.MuiSelect-select[id="mui-component-select-color"]').click();
     cy.get('.MuiMenuItem-root[data-value="green"]').click();
     cy.get('input[name="birthdate"]').type("1990-01-01");
     cy.get('input[name="isStudent"]').check();
@@ -57,7 +57,7 @@ describe("AutoForm Basic Tests", () => {
       age: 25,
       email: "john@example.com",
       website: "https://example.com",
-      color:"green",
+      color: "green",
       birthdate: new Date("1990-01-01"),
       isStudent: true,
     });
@@ -74,7 +74,7 @@ describe("AutoForm Basic Tests", () => {
           email: "john@example.com",
           website: "https://example.com",
           color: "green",
-          birthdate: "1990-01-01" as unknown as Date, 
+          birthdate: "1990-01-01" as unknown as Date,
           isStudent: true,
         }}
         withSubmit

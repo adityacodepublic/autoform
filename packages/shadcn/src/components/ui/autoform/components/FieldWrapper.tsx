@@ -3,15 +3,17 @@ import { Label } from "@/components/ui/label";
 import { FieldWrapperProps } from "@autoform/react";
 
 const DISABLED_LABELS = ["boolean", "object", "array"];
+const DISABLE_HELPER_TEXT = ["object", "array"];
 
 export const FieldWrapper: React.FC<FieldWrapperProps> = ({
-  label,
-  children,
   id,
+  label,
   field,
   error,
+  children,
 }) => {
   const isDisabled = DISABLED_LABELS.includes(field.type);
+  const hideHelperText = DISABLE_HELPER_TEXT.includes(field.type);
 
   return (
     <div className="space-y-2">
@@ -22,12 +24,12 @@ export const FieldWrapper: React.FC<FieldWrapperProps> = ({
         </Label>
       )}
       {children}
-      {field.fieldConfig?.description && (
+      {!hideHelperText && field.fieldConfig?.description && (
         <p className="text-sm text-muted-foreground">
           {field.fieldConfig.description}
         </p>
       )}
-      {!isDisabled && error && (
+      {!hideHelperText && error && (
         <p className="text-sm text-destructive">{error}</p>
       )}
     </div>

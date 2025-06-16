@@ -25,8 +25,8 @@ describe("AutoForm Arrays Tests", () => {
       />
     );
 
-    cy.get('button[name="add-array-item"]').eq(0).should('exist');
-    cy.get('button[name="add-array-item"]').eq(1).should('exist'); 
+    cy.get('button[aria-label="add Tags"]').should("exist");
+    cy.get('button[aria-label="add Friends"]').should("exist");
   });
 
   it("allows adding and removing array items", () => {
@@ -39,16 +39,16 @@ describe("AutoForm Arrays Tests", () => {
     );
 
     // Add tags
-    cy.get('button[name="add-array-item"]').eq(0).click();
+    cy.get('button[aria-label="add Tags"]').click();
     cy.get('input[name="tags.0"]').type("tag1");
-    cy.get('button[name="add-array-item"]').eq(0).click();
+    cy.get('button[aria-label="add Tags"]').click();
     cy.get('input[name="tags.1"]').type("tag2");
 
     // Add friends
-    cy.get('button[name="add-array-item"]').eq(1).click();
+    cy.get('button[aria-label="add Friends"]').click();
     cy.get('input[name="friends.0.name"]').type("Alice");
     cy.get('input[name="friends.0.age"]').type("25");
-    cy.get('button[name="add-array-item"]').eq(1).click();
+    cy.get('button[aria-label="add Friends"]').click();
     cy.get('input[name="friends.1.name"]').type("Bob");
     cy.get('input[name="friends.1.age"]').type("30");
 
