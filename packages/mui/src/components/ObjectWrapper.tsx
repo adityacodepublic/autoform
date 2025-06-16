@@ -1,15 +1,20 @@
 import React from "react";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
 import { ObjectWrapperProps } from "@autoform/react";
+import { FormHelperText, Box, Typography } from "@mui/material";
 
 export const ObjectWrapper: React.FC<ObjectWrapperProps> = ({
   label,
+  field,
   children,
 }) => {
   return (
     <Box sx={{ mt: 2 }}>
       <Typography variant="h6">{label}</Typography>
+      {field.fieldConfig?.description && (
+        <FormHelperText variant="standard">
+          {field.fieldConfig.description}
+        </FormHelperText>
+      )}
       {children}
     </Box>
   );

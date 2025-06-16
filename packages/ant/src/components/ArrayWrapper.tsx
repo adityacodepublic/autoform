@@ -5,14 +5,59 @@ import { PlusOutlined } from "@ant-design/icons";
 
 export const ArrayWrapper: React.FC<ArrayWrapperProps> = ({
   label,
+  field,
   children,
   onAddItem,
+  inputProps,
 }) => {
+  const { key, onChange, onBlur, ref, ...props } = inputProps;
+
   return (
     <section style={{ marginBottom: "20px" }}>
-      <Typography.Title level={4}>{label}</Typography.Title>
+      <Typography.Title
+        level={5}
+        ref={ref}
+        tabIndex={-1}
+        aria-describedby={`${key}-error ${key}-description `}
+      >
+        {field.required && (
+          <Typography.Text
+            type="danger"
+            style={{
+              marginTop: "10px",
+              fontSize: "19px",
+            }}
+          >
+            *{" "}
+          </Typography.Text>
+        )}
+        {label}
+      </Typography.Title>
+      {props.error && (
+        <div
+          style={{ marginBottom: "10px", marginTop: "-10px" }}
+          id={key + "-error"}
+        >
+          <Typography.Text type="danger">{props.error}</Typography.Text>
+        </div>
+      )}
+      {field.fieldConfig?.description && (
+        <div
+          style={{ marginTop: "-10px", marginBottom: "5px" }}
+          id={key + "-description"}
+        >
+          <Typography.Text type="secondary" style={{ fontWeight: "normal" }}>
+            {field.fieldConfig?.description}
+          </Typography.Text>
+        </div>
+      )}
       {children}
-      <Button type="primary" onClick={onAddItem}>
+      <Button
+        aria-label={`add ${label}`}
+        {...props}
+        type="primary"
+        onClick={onAddItem}
+      >
         <PlusOutlined />
       </Button>
     </section>

@@ -3,11 +3,19 @@ import { ObjectWrapperProps } from "@autoform/react";
 
 export const ObjectWrapper: React.FC<ObjectWrapperProps> = ({
   label,
+  field,
   children,
 }) => {
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-medium">{label}</h3>
+      <div>
+        <h3 className="text-lg font-medium">{label}</h3>
+        {field.fieldConfig?.description && (
+          <p className="text-sm text-muted-foreground">
+            {field.fieldConfig.description}
+          </p>
+        )}
+      </div>
       {children}
     </div>
   );
