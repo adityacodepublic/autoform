@@ -6,7 +6,6 @@ import { useController } from "react-hook-form";
 
 export const BooleanField: React.FC<AutoFormFieldProps> = ({
   id,
-  error,
   field,
   label,
   inputProps,
@@ -15,21 +14,18 @@ export const BooleanField: React.FC<AutoFormFieldProps> = ({
   const { field: formField } = useController({ name: id });
 
   return (
-    <>
-      <div className="flex items-center space-x-2">
-        <Checkbox
-          id={id}
-          {...props}
-          {...formField}
-          checked={formField.value}
-          onCheckedChange={formField.onChange}
-        />
-        <Label htmlFor={id}>
-          {label}
-          {field.required && <span className="text-destructive"> *</span>}
-        </Label>
-      </div>
-      {error && <p className="text-sm text-destructive">{error}</p>}
-    </>
+    <div className="flex items-center space-x-2">
+      <Checkbox
+        id={id}
+        {...props}
+        {...formField}
+        checked={formField.value}
+        onCheckedChange={formField.onChange}
+      />
+      <Label htmlFor={id}>
+        {label}
+        {field.required && <span className="text-destructive"> *</span>}
+      </Label>
+    </div>
   );
 };

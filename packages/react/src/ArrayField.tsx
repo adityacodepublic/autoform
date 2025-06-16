@@ -1,5 +1,5 @@
 import React from "react";
-import { useFieldArray, useFormContext } from "react-hook-form";
+import { useFieldArray } from "react-hook-form";
 import { AutoFormField } from "./AutoFormField";
 import { useAutoForm } from "./context";
 import { getLabel, ParsedField } from "@autoform/core";
@@ -7,11 +7,10 @@ import { getLabel, ParsedField } from "@autoform/core";
 export const ArrayField: React.FC<{
   field: ParsedField;
   path: string[];
-}> = ({ field, path }) => {
+  inputProps: any;
+}> = ({ field, path, inputProps }) => {
   const { uiComponents } = useAutoForm();
-  const { control } = useFormContext();
   const { fields, append, remove } = useFieldArray({
-    control,
     name: path.join("."),
   });
 
@@ -27,8 +26,9 @@ export const ArrayField: React.FC<{
 
   return (
     <uiComponents.ArrayWrapper
-      label={getLabel(field)}
       field={field}
+      inputProps={inputProps}
+      label={getLabel(field)}
       onAddItem={() => append(defaultValue)}
     >
       {fields.map((item, index) => (

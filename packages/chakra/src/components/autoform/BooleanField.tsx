@@ -22,7 +22,7 @@ export const BooleanField: React.FC<AutoFormFieldProps> = ({
       invalid={!!error}
       checked={formField.value}
       onCheckedChange={({ checked }) => formField.onChange(checked)}
-      style={{ display: "flex", marginTop: "15px", marginBottom: "5px" }}
+      style={{ display: "flex", marginTop: "15px", marginBottom: "2px" }}
     >
       <span style={{ lineHeight: "16px", cursor: "pointer" }}>
         {label}

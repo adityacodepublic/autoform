@@ -47,23 +47,25 @@ export const BooleanField: React.FC<AutoFormFieldProps> = ({
           {label}
         </label>
       </Checkbox>
-      {field.fieldConfig?.description && (
+      {error && (
         <>
           <Typography.Text
-            type="secondary"
+            type="danger"
             style={{ marginTop: "10px", fontWeight: "normal" }}
           >
-            {field.fieldConfig?.description || " "}
+            {error}
           </Typography.Text>
           <br />
         </>
       )}
-      <Typography.Text
-        type="danger"
-        style={{ marginTop: "10px", fontWeight: "normal" }}
-      >
-        {error}
-      </Typography.Text>
+      {field.fieldConfig?.description && (
+        <Typography.Text
+          type="secondary"
+          style={{ marginTop: "10px", fontWeight: "normal" }}
+        >
+          {field.fieldConfig?.description}
+        </Typography.Text>
+      )}
     </>
   );
 };

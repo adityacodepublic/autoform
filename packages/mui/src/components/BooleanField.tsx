@@ -14,20 +14,17 @@ export const BooleanField: React.FC<AutoFormFieldProps> = ({
   const { field: formField } = useController({ name: id, defaultValue: false });
 
   return (
-    <>
-      <FormControlLabel
-        key={key}
-        {...props}
-        {...formField}
-        label={
-          <span style={{ color: error && "#d32f2f", opacity: 0.8 }}>
-            {label} {field.required && " *"}
-          </span>
-        }
-        checked={formField.value}
-        control={<Checkbox />}
-      />
-      {error && <FormHelperText>{error}</FormHelperText>}
-    </>
+    <FormControlLabel
+      key={key}
+      {...props}
+      {...formField}
+      label={
+        <span style={{ color: error && "#d32f2f", opacity: 0.8 }}>
+          {label} {field.required && " *"}
+        </span>
+      }
+      checked={formField.value}
+      control={<Checkbox />}
+    />
   );
 };

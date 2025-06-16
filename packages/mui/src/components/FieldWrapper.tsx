@@ -5,6 +5,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 import { FieldWrapperProps } from "@autoform/react";
 
 const DISABLED_LABELS = ["boolean", "date", "object", "array"];
+const DISABLE_HELPER_TEXT = ["object", "array"];
 
 export const FieldWrapper: React.FC<FieldWrapperProps> = ({
   label,
@@ -14,6 +15,7 @@ export const FieldWrapper: React.FC<FieldWrapperProps> = ({
   field,
 }) => {
   const isDisabled = DISABLED_LABELS.includes(field.type);
+  const hideHelperText = DISABLE_HELPER_TEXT.includes(field.type);
 
   return (
     <FormControl
@@ -24,10 +26,10 @@ export const FieldWrapper: React.FC<FieldWrapperProps> = ({
     >
       {!isDisabled && <InputLabel htmlFor={id}>{label}</InputLabel>}
       {children}
-      {field.fieldConfig?.description && (
+      {!hideHelperText && field.fieldConfig?.description && (
         <FormHelperText>{field.fieldConfig.description}</FormHelperText>
       )}
-      {!isDisabled && error && <FormHelperText>{error}</FormHelperText>}
+      {!hideHelperText && error && <FormHelperText>{error}</FormHelperText>}
     </FormControl>
   );
 };

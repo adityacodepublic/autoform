@@ -58,9 +58,10 @@ export interface FieldWrapperProps {
 
 export interface ArrayWrapperProps {
   label: Renderable<ReactNode>;
+  onAddItem: () => void;
   children: ReactNode;
   field: ParsedField;
-  onAddItem: () => void;
+  inputProps: any;
 }
 
 export interface ArrayElementWrapperProps {
