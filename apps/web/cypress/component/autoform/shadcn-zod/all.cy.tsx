@@ -7,4 +7,5 @@ import "./enums.cy";
 import "./form-props.cy";
 import "./subobjects.cy";
 import "./ui-customization.cy";
+import "./useForm-properties.cy";
 import "./validation.cy";
