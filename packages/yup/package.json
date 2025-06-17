@@ -30,6 +30,7 @@
     "@autoform/core": "*"
   },
   "peerDependencies": {
-    "yup": "^1.4.0"
+    "yup": "^1.4.0",
+    "@hookform/resolvers": "^5"
   }
 }

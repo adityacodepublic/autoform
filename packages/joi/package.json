@@ -30,6 +30,7 @@
     "@autoform/core": "*"
   },
   "peerDependencies": {
-    "joi": "^17.13.0"
+    "joi": "^17.13.0",
+    "@hookform/resolvers": "^5"
   }
 }

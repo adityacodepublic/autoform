@@ -42,6 +42,7 @@
     "@autoform/core": "*"
   },
   "peerDependencies": {
-    "zod": "^3"
+    "zod": "^3",
+    "@hookform/resolvers": "^5"
   }
 }
