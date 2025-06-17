@@ -1,8 +1,14 @@
 import { z } from "zod";
-import { SchemaProvider, ParsedSchema, SchemaValidation } from "@autoform/core";
+import {
+  Resolver,
+  ParsedSchema,
+  SchemaProvider,
+  SchemaValidation,
+} from "@autoform/core";
 import { getDefaultValues } from "./default-values";
 import { parseSchema } from "./schema-parser";
 import { ZodObjectOrWrapped } from "./types";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export class ZodProvider<T extends ZodObjectOrWrapped>
   implements SchemaProvider<z.infer<T>>
@@ -42,5 +48,9 @@ export class ZodProvider<T extends ZodObjectOrWrapped>
 
   getDefaultValues(): Record<string, any> {
     return getDefaultValues(this.schema);
+  }
+
+  get resolver(): Resolver {
+    return zodResolver(this.schema);
   }
 }

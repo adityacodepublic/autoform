@@ -56,3 +56,14 @@ export type ErrorSchemaValidation = {
 export type SchemaValidation =
   | SuccessfulSchemaValidation
   | ErrorSchemaValidation;
+
+export type Resolver = (
+  values: Record<string, any>,
+  context: any,
+  options: any
+) => Promise<ResolverResult> | ResolverResult;
+
+export type ResolverResult = {
+  values: Record<string, any>;
+  errors: Record<string, any>;
+};

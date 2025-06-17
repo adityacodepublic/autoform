@@ -162,7 +162,115 @@ const zodFormSchema = z.object({
   // obj
 });
 
-export const zodSchemaProvider = new ZodProvider(zodFormSchema);
+// testing
+// req       --in> req
+// req       --in> optional
+// optional  --in> req
+// optional  --in> optional
+const objectTest = z.object({
+  req_optional: z.object({
+    age: z.string().min(2).optional(),
+  }), // req out optional inside
+
+  req_req: z.object({
+    age: z.string().min(2),
+  }), // req out req inside
+
+  optional_req: z
+    .object({
+      age: z.string().min(2),
+    })
+    .optional(), // optional out req inside
+
+  optional_optional: z
+    .object({
+      age: z.string().min(2).optional(),
+    })
+    .optional(), // optional out optional inside
+});
+
+// to make array required > use .nonempty() , else empty array passes validation.
+// to make array optional > use .optional() , to remove * required mark from field.
+const arrayTest = z.object({
+  req_optional: z.array(z.coerce.date().optional()).nonempty(), // req out optional inside
+
+  req_req: z.array(z.string().min(2)).nonempty(), // req out req inside
+
+  optional_req: z.array(z.string().min(2)).optional(), // optional out req inside
+
+  optional_optional: z.array(z.string().min(2).optional()).optional(), // optional out optional inside
+});
+
+const objTest = z.object({
+  req_opt: z.object({
+    names: z.string().min(2).optional(),
+    age: z.coerce.number().optional(),
+  }),
+  opt_req: z
+    .object({
+      names: z.string(),
+      age: z.coerce.number(),
+    })
+    .optional(),
+});
+
+// make array req .nonempty() and optional
+const arrobj = z.object({
+  array: z
+    .array(
+      z.object({
+        id: z.string().optional(),
+        age: z.coerce.number(),
+        athleteSchema: z.tuple([
+          z.string(), // name
+          z.number(), // jersey number
+          z.object({
+            pointsScored: z.number(),
+          }), // statistics
+        ]),
+        attributes: z.array(
+          z.object({
+            type: z.string(),
+            config: z.object({
+              enabled: z.boolean(),
+              notes: z.string().optional(),
+            }),
+          })
+        ),
+      })
+    )
+    .nonempty(),
+  object: z.object({
+    items: z.array(
+      z.object({
+        name: z.string(),
+        details: z.array(
+          z.object({
+            description: z.string().optional(),
+            metadata: z.object({
+              key: z.string(),
+              value: z.string().optional(),
+            }),
+          })
+        ),
+      })
+    ),
+  }),
+  all: z.object({
+    req_opt: z.object({
+      names: z.string().min(2).optional(),
+      age: z.coerce.number().optional(),
+    }),
+    opt_req: z
+      .object({
+        names: z.string(),
+        age: z.coerce.number(),
+      })
+      .optional(),
+  }),
+});
+
+export const zodSchemaProvider = new ZodProvider(objTest);
 
 const yupFormSchema = object({
   name: string().required().label("Your Name").default("John Doe"),
@@ -182,11 +290,13 @@ const yupFormSchema = object({
     .transform((val) => val),
   website: string().url().nullable(),
   // createdOn: date().default(() => new Date()),
-  guests: array().of(
-    object({
-      name: string().required(),
-    })
-  ),
+  guests: array()
+    .of(
+      object({
+        name: string().required(),
+      })
+    )
+    .min(1, "At least one guest is required"),
   abc: date().optional(),
   sport: mixed().oneOf(Object.values(Sports)),
   hobbies: array().of(string()),

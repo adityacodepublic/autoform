@@ -19,33 +19,89 @@ export function getDefaultValues(
   return schemaProvider.getDefaultValues();
 }
 
-// Recursively remove empty values from an object (null, undefined, "", [], {})
-export function removeEmptyValues<T extends Record<string, any>>(
+const isPlainObject = (value: any): boolean =>
+  typeof value === "object" &&
+  Object.prototype.toString.call(value) === "[object Object]";
+
+const isEmpty = (value: any): boolean => [null, undefined, ""].includes(value); // includes cannot check {}, []
+
+/**
+ * Recursively remove empty values from an object (null, undefined, "", [], {}).
+ * - Retains objects such as (Date, RegExp, functions, etc.)
+ */
+export function removeEmptyValue<T extends Record<string, any>>(
   values: T
 ): Partial<T> {
   const result: Partial<T> = {};
   for (const key in values) {
     const value = values[key];
-    if ([null, undefined, "", [], {}].includes(value)) {
-      continue;
-    }
+
+    if (isEmpty(value)) continue;
 
     if (Array.isArray(value)) {
-      const newArray = value.map((item: any) => {
-        if (typeof item === "object") {
-          return removeEmptyValues(item);
-        }
-        return item;
-      });
-      result[key] = newArray.filter((item: any) => item !== null);
-    } else if (typeof value === "object") {
-      result[key] = removeEmptyValues(value) as any;
+      const cleaned = Object.values(removeEmptyValue({ ...value }));
+      if (Object.keys(cleaned).length) result[key] = cleaned as any;
+    } else if (isPlainObject(value)) {
+      const cleaned = removeEmptyValue(value);
+      if (Object.keys(cleaned).length) result[key] = cleaned as any;
     } else {
       result[key] = value;
     }
   }
 
   return result;
+}
+
+/**
+ * Recursively replaces empty values from an object (null, undefined, "", [], {}).
+ * - Retains objects such as (Date, RegExp, functions, etc.) used in resolver.
+ */
+export function replaceEmptyValue<T extends Record<string, any>>(
+  values: T
+): Partial<T> {
+  const result: Partial<T> = {};
+  for (const key in values) {
+    const value = values[key];
+
+    if (isEmpty(value)) {
+      result[key] = undefined;
+      continue;
+    }
+
+    if (Array.isArray(value)) {
+      const cleaned = Object.values(replaceEmptyValue({ ...value }))  ;
+      if (Object.keys(cleaned).length) result[key] = cleaned as any; // removes [], so required and optionl works as expected
+      else result[key] = undefined;                               // keeps   [], so required array fields become optional. to make required pair with .nonempty()
+    } else if (isPlainObject(value)) {
+      const cleaned = replaceEmptyValue(value);
+      if (Object.keys(cleaned).length) result[key] = cleaned as any; // removes {}, so required and optionl works as expected
+      else result[key] = undefined;                               // keeps   [], so required array fields become optional. to make required pair with .nonempty()
+    } else {
+      result[key] = value;
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Recursively focuses the first and deepest input element with an error, if found.
+ */
+export function focusError(errors: Record<string, any>): boolean {
+  if (!errors || typeof errors !== "object") return false;
+
+  if (typeof errors?.ref?.focus === "function") {
+    errors.ref.focus();
+    return true;
+  }
+
+  for (const val of Object.values(errors)) {
+    if (typeof val === "object") {
+      if (focusError(val)) return true;
+    }
+  }
+
+  return false;
 }
 
 /**

@@ -31,8 +31,11 @@ const HookTest = () => {
     isSubmitSuccessful: "initial",
     trigger: "initial",
     watch: "initial",
-    clear: "initial",
+    clear: "initial", // reset > named as clear die to conflict with reset function
     setValue: "initial",
+    // getValue: "initial"
+    // setError and setFocus with shouldFocus 
+    // clearErrors
   };
   const [test, setTest] = useState<typeof tests>(tests);
   const formFields = [
