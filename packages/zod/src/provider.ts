@@ -1,7 +1,7 @@
-import { ZodObjectOrWrapped } from "../v3";
-import { isZodV4Schema, AnyZodObject } from "../utils";
-import { ZodProvider as V3Provider } from "../v3/provider";
-import { ZodProvider as V4Provider } from "../v4/provider";
+import { ZodObjectOrWrapped } from "./v3";
+import { isZodV4Schema, AnyZodObject } from "./utils";
+import { ZodProvider as V3Provider } from "./v3/provider";
+import { ZodProvider as V4Provider } from "./v4/provider";
 import { SchemaProvider, ParsedSchema, SchemaValidation } from "@autoform/core";
 
 export class ZodProvider<T extends AnyZodObject>
