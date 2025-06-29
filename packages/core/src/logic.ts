@@ -49,6 +49,60 @@ export function removeEmptyValues<T extends Record<string, any>>(
 }
 
 /**
+ * Recursively replaces empty values from an object (null, undefined, "", [], {}).
+ * - Retains objects such as (Date, RegExp, functions, etc.) used in resolver.
+ */
+const isPlainObject = (value: any): boolean =>
+  typeof value === "object" &&
+  Object.prototype.toString.call(value) === "[object Object]";
+
+const isEmpty = (value: any): boolean => [null, undefined, ""].includes(value); // includes method cannot check {}, []
+
+export function replaceEmptyValue<T extends Record<string, any>>(values: T): T {
+  const result = { ...values };
+  for (const key in values) {
+    const value = values[key];
+
+    if (isEmpty(value)) {
+      (result[key] as any) = undefined;
+      continue;
+    }
+
+    if (Array.isArray(value)) {
+      const cleaned = Object.values(replaceEmptyValue({ ...value }));
+      result[key] = cleaned as any;
+    } else if (isPlainObject(value)) {
+      const cleaned = replaceEmptyValue(value);
+      result[key] = cleaned as any;
+    } else {
+      result[key] = value;
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Recursively focuses the first and deepest input element with an error, if found.
+ */
+export function focusError(errors: Record<string, any>): boolean {
+  if (!errors || typeof errors !== "object") return false;
+
+  if (typeof errors?.ref?.focus === "function") {
+    errors.ref.focus();
+    return true;
+  }
+
+  for (const val of Object.values(errors)) {
+    if (typeof val === "object") {
+      if (focusError(val)) return true;
+    }
+  }
+
+  return false;
+}
+
+/**
  * Sort the fields by order.
  * If no order is set, the field will be sorted based on the order in the schema.
  */

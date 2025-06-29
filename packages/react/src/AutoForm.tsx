@@ -1,9 +1,18 @@
-import React, { FormEventHandler, useEffect } from "react";
-import { useForm, FormProvider, DefaultValues } from "react-hook-form";
+import { FormEventHandler, useCallback, useEffect } from "react";
+import {
+  useForm,
+  FormProvider,
+  Resolver,
+  DefaultValues,
+  ResolverResult,
+  ResolverOptions,
+  SubmitErrorHandler,
+} from "react-hook-form";
 import {
   parseSchema,
   getDefaultValues,
-  removeEmptyValues,
+  focusError,
+  replaceEmptyValue,
 } from "@autoform/core";
 import { AutoFormProps } from "./types";
 import { AutoFormProvider } from "./context";
@@ -22,12 +31,36 @@ export function AutoForm<T extends Record<string, any>>({
   formProps = {},
 }: AutoFormProps<T>) {
   const parsedSchema = parseSchema(schema);
+
+  const resolver: Resolver<T> = useCallback(
+    async (
+      values: T,
+      ctx: any,
+      options: ResolverOptions<T>
+    ): Promise<ResolverResult<T>> => {
+      const cleanedValues = replaceEmptyValue(values);
+
+      //const validation = schema.validateSchema(cleanedValues as T);
+      console.log("resolver input", { values, cleanedValues });
+      console.log(
+        "resolver result",
+        await schema.resolver(cleanedValues, ctx, options)
+      );
+
+      return schema.resolver(cleanedValues, ctx, options);
+    },
+    [schema]
+  );
+
   const methods = useForm<T>({
     defaultValues: {
       ...(getDefaultValues(schema) as Partial<T>),
       ...defaultValues,
     } as DefaultValues<T>,
     values: values as T,
+    shouldFocusError: false,
+    reValidateMode: "onSubmit",
+    resolver,
   });
 
   useEffect(() => {
@@ -36,38 +69,13 @@ export function AutoForm<T extends Record<string, any>>({
     }
   }, [onFormInit, methods]);
 
-  const handleSubmit = async (dataRaw: T) => {
-    const data = removeEmptyValues(dataRaw);
-    const validationResult = schema.validateSchema(data as T);
-    console.log("validationResult", { validationResult, dataRaw, data });
-    if (validationResult.success) {
-      await onSubmit(validationResult.data, methods);
-    } else {
-      methods.clearErrors();
-      let isFocused: boolean = false;
-      validationResult.errors?.forEach((error) => {
-        const path = error.path.join(".");
-        methods.setError(
-          path as any,
-          {
-            type: "custom",
-            message: error.message,
-          },
-          { shouldFocus: !isFocused }
-        );
+  const onError: SubmitErrorHandler<T> = (errors) => {
+    console.log("errors -->", errors);
+    console.log("errors2", focusError(errors));
+  };
 
-        isFocused = true;
-
-        // For some custom errors, zod adds the final element twice for some reason
-        const correctedPath = error.path?.slice?.(0, -1);
-        if (correctedPath?.length > 0) {
-          methods.setError(correctedPath.join(".") as any, {
-            type: "custom",
-            message: error.message,
-          });
-        }
-      });
-    }
+  const handleSubmit = async (data: T) => {
+    await onSubmit(data, methods);
   };
 
   return (
@@ -80,7 +88,7 @@ export function AutoForm<T extends Record<string, any>>({
         }}
       >
         <uiComponents.Form
-          onSubmit={methods.handleSubmit(handleSubmit)}
+          onSubmit={methods.handleSubmit(handleSubmit, onError)}
           {...formProps}
         >
           {parsedSchema.fields.map((field) => (

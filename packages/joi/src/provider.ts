@@ -3,6 +3,7 @@ import { validateSchema } from "./validator";
 import { getDefaultValues } from "./default-values";
 import { parseSchema } from "./schema-parser";
 import { JoiObjectOrWrapped } from "./types";
+import { joiResolver } from "@hookform/resolvers/joi";
 
 export class JoiProvider<T extends JoiObjectOrWrapped>
   implements SchemaProvider
@@ -28,5 +29,9 @@ export class JoiProvider<T extends JoiObjectOrWrapped>
 
   getDefaultValues(): Record<string, any> {
     return getDefaultValues(this.schema);
+  }
+
+  get resolver() {
+    return joiResolver(this.schema);
   }
 }

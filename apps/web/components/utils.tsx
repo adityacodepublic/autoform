@@ -12,6 +12,10 @@ import {
   fieldConfig as config,
 } from "@autoform/zod/v4";
 import { object, string, number, date, InferType, array, mixed } from "yup";
+import {
+  ZodProvider as ZodProvider4,
+  fieldConfig as config,
+} from "@autoform/zod/v4";
 import { ZodProvider } from "@autoform/zod";
 import { YupProvider, fieldConfig as yupFieldConfig } from "@autoform/yup";
 import { JoiProvider, fieldConfig as joiFieldConfig } from "@autoform/joi";
@@ -37,7 +41,7 @@ const zodFormSchema = z.object({
   //   .optional()
   //   .superRefine(
   //     customFieldConfig({
-  //       description: "This uses a custom field component",
+  //       description: "This uses a custom config component",
   //       order: 1,
   //       fieldType: "custom",
   //       customData: {
@@ -88,14 +92,13 @@ const zodFormSchema = z.object({
     .max(10, {
       message: "Favourite number must be at most 10.",
     })
-    .default(1)
-    .optional(),
+    .optional()
+    .default(10),
   acceptTerms: z
     .boolean()
     .describe("Accept terms and conditions.")
     .refine((value) => value, {
       message: "You must accept the terms and conditions.",
-      path: ["acceptTerms"],
     }),
   sendMeMails: z
     .boolean()
@@ -122,16 +125,14 @@ const zodFormSchema = z.object({
     .describe("How many marshmallows fit in your mouth?"),
   // Native enum example
   sports: z.nativeEnum(Sports).describe("What is your favourite sport?"),
-  guests: z.array(
-    z.object({
-      name: z.string(),
-      age: z.coerce.number().optional(),
-      location: z.object({
-        city: z.string(),
-        country: z.string().optional(),
-        test: z.object({
-          name: z.string(),
-          age: z.coerce.number(),
+  guests: z
+    .array(
+      z.object({
+        name: z.string(),
+        age: z.coerce.number().optional(),
+        location: z.object({
+          city: z.string(),
+          country: z.string().optional(),
           test: z.object({
             name: z.string(),
             age: z.coerce.number(),
@@ -141,13 +142,17 @@ const zodFormSchema = z.object({
               test: z.object({
                 name: z.string(),
                 age: z.coerce.number(),
+                test: z.object({
+                  name: z.string(),
+                  age: z.coerce.number(),
+                }),
               }),
             }),
           }),
         }),
-      }),
-    })
-  ),
+      })
+    )
+    .min(1, "minimum one guest is required"),
   // location: z.object({
   //   city: z.string(),
   //   country: z.string().optional(),
@@ -278,6 +283,14 @@ const zodFormSchema4 = z4.object({
   ),
 });
 
+const player = z4
+  .string()
+  .min(2)
+  .check(
+    fieldConfig({
+      description: "the good player",
+    })
+  );
 // zod mini
 const zodFormSchema4mini = zm.object({
   username: zm
@@ -377,11 +390,13 @@ const yupFormSchema = object({
     .transform((val) => val),
   website: string().url().nullable(),
   // createdOn: date().default(() => new Date()),
-  guests: array().of(
-    object({
-      name: string().required(),
-    })
-  ),
+  guests: array()
+    .of(
+      object({
+        name: string().required(),
+      })
+    )
+    .min(1, "At least one guest is required"),
   abc: date().optional(),
   sport: mixed().oneOf(Object.values(Sports)),
   hobbies: array().of(string()),
