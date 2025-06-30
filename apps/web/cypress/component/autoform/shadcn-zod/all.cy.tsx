@@ -1,9 +1,14 @@
 import "./advanced-features.cy";
+import "./advanced-features.cy";
 import "./arrays.cy";
 import "./basic.cy";
 import "./controlled-form.cy";
 import "./custom-fields.cy";
+import "./basic.cy";
+import "./controlled-form.cy";
+import "./custom-fields.cy";
 import "./enums.cy";
+import "./form-props.cy";
 import "./form-props.cy";
 import "./subobjects.cy";
 import "./ui-customization.cy";
