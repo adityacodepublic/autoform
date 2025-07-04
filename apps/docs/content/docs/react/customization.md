@@ -3,7 +3,7 @@ title: Customization
 description: The customization of the components is done by providing a `fieldConfig` to your schema fields. This allows you to customize the rendering of the field, add additional props, and more.
 ---
 
-With zod, you can use the `superRefine` method to add a `fieldConfig` to your schema field. For more information, see the [Zod documentation](/docs/schema-providers/zod).
+With zod, you can use the `superRefine` method in `zod or zod/v3`, or the `check` method in `zod/v4 or zod/v4-mini`, to add a `fieldConfig` to your schema field. For more information, see the [Zod documentation](/docs/schema-providers/zod).
 
 With yup, you can use the `transform` method to add a `fieldConfig` to your schema field. For more information, see the [Yup documentation](/docs/schema-providers/yup).
 
