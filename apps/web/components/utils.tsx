@@ -1,22 +1,10 @@
-import {
-  fieldConfig,
-  FieldWrapperProps,
-  buildZodFieldConfig,
-} from "@autoform/react";
+import { FieldWrapperProps, buildZodFieldConfig } from "@autoform/react";
 import Joi from "joi";
 import * as z from "zod";
 import * as z4 from "zod/v4";
 import * as zm from "zod/v4-mini";
-import {
-  ZodProvider as ZodProvider4,
-  fieldConfig as config,
-} from "@autoform/zod/v4";
-import { object, string, number, date, InferType, array, mixed } from "yup";
-import {
-  ZodProvider as ZodProvider4,
-  fieldConfig as config,
-} from "@autoform/zod/v4";
-import { ZodProvider } from "@autoform/zod";
+import { ZodProvider, fieldConfig } from "@autoform/zod";
+import { object, string, number, date, array, mixed } from "yup";
 import { YupProvider, fieldConfig as yupFieldConfig } from "@autoform/yup";
 import { JoiProvider, fieldConfig as joiFieldConfig } from "@autoform/joi";
 
@@ -184,8 +172,9 @@ const zodFormSchema4 = z4.object({
     .min(2, {
       message: "Username must be at least 2 characters.",
     })
-    .register(
-      ...config({
+    .default("Default username !!")
+    .check(
+      fieldConfig({
         description: "You cannot change this later.",
       })
     ),
@@ -198,8 +187,8 @@ const zodFormSchema4 = z4.object({
     })
     .default("this ia s good pass")
     .describe("Your secure password")
-    .register(
-      ...config({
+    .check(
+      fieldConfig({
         description: (
           <>
             Always use a <b>secure password</b>!
@@ -233,8 +222,8 @@ const zodFormSchema4 = z4.object({
     .boolean()
     .optional()
     .default(false)
-    .register(
-      ...config({
+    .check(
+      fieldConfig({
         fieldWrapper: (props: FieldWrapperProps) => {
           return (
             <>
@@ -283,31 +272,26 @@ const zodFormSchema4 = z4.object({
   ),
 });
 
-const player = z4
-  .string()
-  .min(2)
-  .check(
-    fieldConfig({
-      description: "the good player",
-    })
-  );
 // zod mini
 const zodFormSchema4mini = zm.object({
-  username: zm
-    .string({
-      error: "Username is required.",
-    })
-    .check(
-      zm.minLength(2, {
-        message: "Username must be at least 2 characters.",
+  username: zm._default(
+    zm
+      .string({
+        error: "Username is required.",
       })
-    )
-    .register(
-      ...config({
-        // Changed from superRefine to register
-        description: "You cannot change this later.",
-      })
-    ),
+      .check(
+        zm.minLength(2, {
+          message: "Username must be at least 2 characters.",
+        })
+      )
+      .check(
+        fieldConfig({
+          // Changed from superRefine to register
+          description: "You cannot change this later.",
+        })
+      ),
+    "Default username !"
+  ),
 
   password: zm
     .string({
@@ -318,8 +302,8 @@ const zodFormSchema4mini = zm.object({
         message: "Password must be at least 8 characters.",
       })
     )
-    .register(
-      ...config({
+    .check(
+      fieldConfig({
         // Changed from superRefine to register
         description: "Always use a secure password!",
         inputProps: {
@@ -328,13 +312,13 @@ const zodFormSchema4mini = zm.object({
       })
     ),
 
-  sendMeMails: zm.optional(zm.boolean()).register(
-    ...config({
+  sendMeMails: zm.optional(zm.boolean()).check(
+    fieldConfig({
       // Changed from superRefine to register
       fieldWrapper: (props: FieldWrapperProps) => (
         <>
           {props.children}
-          <p className="text-muted-foreground text-sm">
+          <p className="text-muted-foreground text-xs">
             Don't worry, we only send important emails!
           </p>
         </>
@@ -342,15 +326,15 @@ const zodFormSchema4mini = zm.object({
     })
   ),
 
-  favouriteNumber: zm.optional(zm._default(zm.number(), 4)).register(
-    ...config({
+  favouriteNumber: zm.optional(zm._default(zm.number(), 4)).check(
+    fieldConfig({
       description: "Enter your favourite number",
       label: "Favourite Number !!!",
     })
   ),
 
-  favouriteSport: zm.enum(["red", "green", "blue"]).register(
-    ...config({
+  favouriteSport: zm.enum(["red", "green", "blue"]).check(
+    fieldConfig({
       description: "Your favourite sport",
     })
   ),
@@ -370,7 +354,7 @@ const zodFormSchema4mini = zm.object({
   }),
 });
 
-export const zodSchemaProvider = new ZodProvider4(zodFormSchema4mini);
+export const zodSchemaProvider = new ZodProvider(zodFormSchema);
 
 const yupFormSchema = object({
   name: string().required().label("Your Name").default("John Doe"),

@@ -3,7 +3,7 @@ import { AutoForm } from "@autoform/chakra";
 import { ZodProvider } from "@autoform/zod";
 import { z } from "zod";
 
-describe("AutoForm Arrays Tests", () => {
+describe("AutoForm Arrays Tests (CHAKRA-ZOD)", () => {
   const arraySchema = z.object({
     tags: z.array(z.string()),
     friends: z.array(

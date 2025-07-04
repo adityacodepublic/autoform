@@ -16,22 +16,13 @@
     "textarea",
     "toggle"
   ],
-  "dependencies": [
-    "zod",
-    "@autoform/react"
-  ],
+  "dependencies": ["zod", "@autoform/react"],
   "devDependencies": [],
   "tailwind": {
     "config": {}
   },
   "cssVars": {},
   "files": [
-    {
-      "path": "src\\components\\ui\\autoform\\utils.ts",
-      "target": "src\\components\\ui\\autoform\\utils.ts",
-      "content": "import { buildZodFieldConfig } from \"@autoform/react\";\r\nimport { FieldTypes } from \"./AutoForm\";\r\n\r\nexport const fieldConfig = buildZodFieldConfig<\r\n  FieldTypes,\r\n  {\r\n    // Add types for `customData` here.\r\n  }\r\n>();\r\n",
-      "type": "registry:ui"
-    },
     {
       "path": "src\\components\\ui\\autoform\\types.ts",
       "target": "src\\components\\ui\\autoform\\types.ts",
@@ -41,7 +32,7 @@
     {
       "path": "src\\components\\ui\\autoform\\index.ts",
       "target": "src\\components\\ui\\autoform\\index.ts",
-      "content": "export * from \"./AutoForm\";\r\nexport * from \"./types\";\r\nexport * from \"./utils\";\r\n",
+      "content": "export * from \"./AutoForm\";\r\nexport * from \"./types\";\r\n",
       "type": "registry:ui"
     },
     {
@@ -65,13 +56,13 @@
     {
       "path": "src\\components\\ui\\autoform\\components\\SelectField.tsx",
       "target": "src\\components\\ui\\autoform\\components\\SelectField.tsx",
-      "content": "import {\r\n  Select,\r\n  SelectContent,\r\n  SelectItem,\r\n  SelectTrigger,\r\n  SelectValue,\r\n} from \"@/components/ui/select\";\r\nimport { AutoFormFieldProps } from \"@autoform/react\";\r\nimport React from \"react\";\r\nimport { useController } from \"react-hook-form\";\r\n\r\nexport const SelectField: React.FC<AutoFormFieldProps> = ({\r\n  field,\r\n  inputProps,\r\n  error,\r\n  id,\r\n}) => {\r\n  const { key, onChange, onBlur, ref, ...props } = inputProps;\r\n  const { field: formField } = useController({ name: id });\r\n\r\n  return (\r\n    <Select\r\n      onValueChange={formField.onChange}\r\n      value={formField.value}\r\n      {...props}\r\n    >\r\n      <SelectTrigger\r\n        id={id}\r\n        {...formField}\r\n        className={error ? \"border-destructive\" : \"\"}\r\n      >\r\n        <SelectValue placeholder={props.placeholder ?? \"Select an option\"} />\r\n      </SelectTrigger>\r\n      <SelectContent>\r\n        {(field.options || []).map(([key, label]) => (\r\n          <SelectItem key={key} value={label}>\r\n            {label}\r\n          </SelectItem>\r\n        ))}\r\n      </SelectContent>\r\n    </Select>\r\n  );\r\n};\r\n",
+      "content": "import {\r\n  Select,\r\n  SelectContent,\r\n  SelectItem,\r\n  SelectTrigger,\r\n  SelectValue,\r\n} from \"@/components/ui/select\";\r\nimport { AutoFormFieldProps } from \"@autoform/react\";\r\nimport React from \"react\";\r\n\r\nexport const SelectField: React.FC<AutoFormFieldProps> = ({\r\n  field,\r\n  inputProps,\r\n  error,\r\n  id,\r\n}) => {\r\n  const { key, ...props } = inputProps;\r\n\r\n  return (\r\n    <Select\r\n      {...props}\r\n      onValueChange={(value) => {\r\n        const syntheticEvent = {\r\n          target: {\r\n            value,\r\n            name: field.key,\r\n          },\r\n        } as React.ChangeEvent<HTMLInputElement>;\r\n        props.onChange(syntheticEvent);\r\n      }}\r\n      defaultValue={field.default}\r\n    >\r\n      <SelectTrigger id={id} className={error ? \"border-destructive\" : \"\"}>\r\n        <SelectValue placeholder=\"Select an option\" />\r\n      </SelectTrigger>\r\n      <SelectContent>\r\n        {(field.options || []).map(([key, label]) => (\r\n          <SelectItem key={key} value={key}>\r\n            {label}\r\n          </SelectItem>\r\n        ))}\r\n      </SelectContent>\r\n    </Select>\r\n  );\r\n};\r\n",
       "type": "registry:ui"
     },
     {
       "path": "src\\components\\ui\\autoform\\components\\ObjectWrapper.tsx",
       "target": "src\\components\\ui\\autoform\\components\\ObjectWrapper.tsx",
-      "content": "import React from \"react\";\r\nimport { ObjectWrapperProps } from \"@autoform/react\";\r\n\r\nexport const ObjectWrapper: React.FC<ObjectWrapperProps> = ({\r\n  label,\r\n  field,\r\n  children,\r\n}) => {\r\n  return (\r\n    <div className=\"space-y-4\">\r\n      <div>\r\n        <h3 className=\"text-lg font-medium\">{label}</h3>\r\n        {field.fieldConfig?.description && (\r\n          <p className=\"text-sm text-muted-foreground\">\r\n            {field.fieldConfig.description}\r\n          </p>\r\n        )}\r\n      </div>\r\n      {children}\r\n    </div>\r\n  );\r\n};\r\n",
+      "content": "import React from \"react\";\r\nimport { ObjectWrapperProps } from \"@autoform/react\";\r\n\r\nexport const ObjectWrapper: React.FC<ObjectWrapperProps> = ({\r\n  label,\r\n  children,\r\n}) => {\r\n  return (\r\n    <div className=\"space-y-4\">\r\n      <h3 className=\"text-lg font-medium\">{label}</h3>\r\n      {children}\r\n    </div>\r\n  );\r\n};\r\n",
       "type": "registry:ui"
     },
     {
@@ -89,13 +80,13 @@
     {
       "path": "src\\components\\ui\\autoform\\components\\FieldWrapper.tsx",
       "target": "src\\components\\ui\\autoform\\components\\FieldWrapper.tsx",
-      "content": "import React from \"react\";\r\nimport { Label } from \"@/components/ui/label\";\r\nimport { FieldWrapperProps } from \"@autoform/react\";\r\n\r\nconst DISABLED_LABELS = [\"boolean\", \"object\", \"array\"];\r\nconst DISABLE_HELPER_TEXT = [\"object\", \"array\"];\r\n\r\nexport const FieldWrapper: React.FC<FieldWrapperProps> = ({\r\n  id,\r\n  label,\r\n  field,\r\n  error,\r\n  children,\r\n}) => {\r\n  const isDisabled = DISABLED_LABELS.includes(field.type);\r\n  const hideHelperText = DISABLE_HELPER_TEXT.includes(field.type);\r\n\r\n  return (\r\n    <div className=\"space-y-2\">\r\n      {!isDisabled && (\r\n        <Label htmlFor={id}>\r\n          {label}\r\n          {field.required && <span className=\"text-destructive\"> *</span>}\r\n        </Label>\r\n      )}\r\n      {children}\r\n      {!hideHelperText && field.fieldConfig?.description && (\r\n        <p className=\"text-sm text-muted-foreground\">\r\n          {field.fieldConfig.description}\r\n        </p>\r\n      )}\r\n      {!hideHelperText && error && (\r\n        <p className=\"text-sm text-destructive\">{error}</p>\r\n      )}\r\n    </div>\r\n  );\r\n};\r\n",
+      "content": "import React from \"react\";\r\nimport { Label } from \"@/components/ui/label\";\r\nimport { FieldWrapperProps } from \"@autoform/react\";\r\n\r\nconst DISABLED_LABELS = [\"boolean\", \"object\", \"array\"];\r\n\r\nexport const FieldWrapper: React.FC<FieldWrapperProps> = ({\r\n  label,\r\n  children,\r\n  id,\r\n  field,\r\n  error,\r\n}) => {\r\n  const isDisabled = DISABLED_LABELS.includes(field.type);\r\n\r\n  return (\r\n    <div className=\"space-y-2\">\r\n      {!isDisabled && (\r\n        <Label htmlFor={id}>\r\n          {label}\r\n          {field.required && <span className=\"text-destructive\"> *</span>}\r\n        </Label>\r\n      )}\r\n      {children}\r\n      {field.fieldConfig?.description && (\r\n        <p className=\"text-sm text-muted-foreground\">\r\n          {field.fieldConfig.description}\r\n        </p>\r\n      )}\r\n      {error && <p className=\"text-sm text-destructive\">{error}</p>}\r\n    </div>\r\n  );\r\n};\r\n",
       "type": "registry:ui"
     },
     {
       "path": "src\\components\\ui\\autoform\\components\\ErrorMessage.tsx",
       "target": "src\\components\\ui\\autoform\\components\\ErrorMessage.tsx",
-      "content": "import React from \"react\";\r\nimport { AlertCircle } from \"lucide-react\";\r\n\r\nimport { Alert, AlertTitle } from \"@/components/ui/alert\";\r\n\r\nexport const ErrorMessage: React.FC<{ error: string }> = ({ error }) => (\r\n  <Alert variant=\"destructive\">\r\n    <AlertCircle className=\"h-5 w-5 mt-2\" />\r\n    <AlertTitle className=\"text-sm/5\">{error}</AlertTitle>\r\n  </Alert>\r\n);\r\n",
+      "content": "import React from \"react\";\r\nimport { AlertCircle } from \"lucide-react\";\r\n\r\nimport { Alert, AlertTitle } from \"@/components/ui/alert\";\r\n\r\nexport const ErrorMessage: React.FC<{ error: string }> = ({ error }) => (\r\n  <Alert variant=\"destructive\">\r\n    <AlertCircle className=\"h-4 w-4\" />\r\n    <AlertTitle>{error}</AlertTitle>\r\n  </Alert>\r\n);\r\n",
       "type": "registry:ui"
     },
     {
@@ -107,13 +98,13 @@
     {
       "path": "src\\components\\ui\\autoform\\components\\BooleanField.tsx",
       "target": "src\\components\\ui\\autoform\\components\\BooleanField.tsx",
-      "content": "import React from \"react\";\r\nimport { AutoFormFieldProps } from \"@autoform/react\";\r\nimport { Checkbox } from \"@/components/ui/checkbox\";\r\nimport { Label } from \"@/components/ui/label\";\r\nimport { useController } from \"react-hook-form\";\r\n\r\nexport const BooleanField: React.FC<AutoFormFieldProps> = ({\r\n  id,\r\n  field,\r\n  label,\r\n  inputProps,\r\n}) => {\r\n  const { key, onChange, onBlur, ...props } = inputProps;\r\n  const { field: formField } = useController({ name: id });\r\n\r\n  return (\r\n    <div className=\"flex items-center space-x-2\">\r\n      <Checkbox\r\n        id={id}\r\n        {...props}\r\n        {...formField}\r\n        checked={formField.value}\r\n        onCheckedChange={formField.onChange}\r\n      />\r\n      <Label htmlFor={id}>\r\n        {label}\r\n        {field.required && <span className=\"text-destructive\"> *</span>}\r\n      </Label>\r\n    </div>\r\n  );\r\n};\r\n",
+      "content": "import React from \"react\";\r\nimport { Checkbox } from \"@/components/ui/checkbox\";\r\nimport { AutoFormFieldProps } from \"@autoform/react\";\r\nimport { Label } from \"../../label\";\r\n\r\nexport const BooleanField: React.FC<AutoFormFieldProps> = ({\r\n  field,\r\n  label,\r\n  id,\r\n  inputProps,\r\n}) => (\r\n  <div className=\"flex items-center space-x-2\">\r\n    <Checkbox\r\n      id={id}\r\n      onCheckedChange={(checked) => {\r\n        // react-hook-form expects an event object\r\n        const event = {\r\n          target: {\r\n            name: field.key,\r\n            value: checked,\r\n          },\r\n        };\r\n        inputProps.onChange(event);\r\n      }}\r\n      checked={inputProps.value}\r\n    />\r\n    <Label htmlFor={id}>\r\n      {label}\r\n      {field.required && <span className=\"text-destructive\"> *</span>}\r\n    </Label>\r\n  </div>\r\n);\r\n",
       "type": "registry:ui"
     },
     {
       "path": "src\\components\\ui\\autoform\\components\\ArrayWrapper.tsx",
       "target": "src\\components\\ui\\autoform\\components\\ArrayWrapper.tsx",
-      "content": "import React from \"react\";\r\nimport { PlusIcon } from \"lucide-react\";\r\nimport { Button } from \"@/components/ui/button\";\r\nimport { ArrayWrapperProps } from \"@autoform/react\";\r\n\r\nexport const ArrayWrapper: React.FC<ArrayWrapperProps> = ({\r\n  label,\r\n  field,\r\n  children,\r\n  onAddItem,\r\n  inputProps,\r\n}) => {\r\n  const { key, onChange, onBlur, ref, ...props } = inputProps;\r\n\r\n  return (\r\n    <div className=\"space-y-2\">\r\n      <div className=\"space-y-1\">\r\n        <h3\r\n          className=\"text-md font-medium\"\r\n          ref={ref}\r\n          tabIndex={-1}\r\n          aria-describedby={`${key}-error ${key}-description`}\r\n        >\r\n          {label}\r\n          {field.required && <span className=\"text-destructive\"> *</span>}\r\n        </h3>\r\n        {field.fieldConfig?.description && (\r\n          <p\r\n            className=\"text-sm text-muted-foreground\"\r\n            id={key + \"-description\"}\r\n          >\r\n            {field.fieldConfig.description}\r\n          </p>\r\n        )}\r\n        {props.error && (\r\n          <p className=\"text-sm text-destructive\" id={key + \"-error\"}>\r\n            {props.error}\r\n          </p>\r\n        )}\r\n      </div>\r\n      {children}\r\n      <Button\r\n        {...props}\r\n        size=\"sm\"\r\n        type=\"button\"\r\n        variant=\"outline\"\r\n        onClick={onAddItem}\r\n        aria-label={`add ${label}`}\r\n      >\r\n        <PlusIcon className=\"h-4 w-4\" />\r\n      </Button>\r\n    </div>\r\n  );\r\n};\r\n",
+      "content": "import React from \"react\";\r\nimport { Button } from \"@/components/ui/button\";\r\nimport { PlusIcon } from \"lucide-react\";\r\nimport { ArrayWrapperProps } from \"@autoform/react\";\r\n\r\nexport const ArrayWrapper: React.FC<ArrayWrapperProps> = ({\r\n  label,\r\n  children,\r\n  onAddItem,\r\n}) => {\r\n  return (\r\n    <div className=\"space-y-4\">\r\n      <h3 className=\"text-lg font-medium\">{label}</h3>\r\n      {children}\r\n      <Button onClick={onAddItem} variant=\"outline\" size=\"sm\" type=\"button\">\r\n        <PlusIcon className=\"h-4 w-4\" />\r\n      </Button>\r\n    </div>\r\n  );\r\n};\r\n",
       "type": "registry:ui"
     },
     {

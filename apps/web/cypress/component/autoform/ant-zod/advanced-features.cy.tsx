@@ -3,7 +3,7 @@ import { AutoForm } from "@autoform/ant";
 import { ZodProvider, fieldConfig } from "@autoform/zod";
 import { z } from "zod";
 
-describe("AutoForm Advanced Features Tests", () => {
+describe("AutoForm Advanced Features Tests (ANT-ZOD)", () => {
   const advancedSchema = z.object({
     username: z
       .string()
