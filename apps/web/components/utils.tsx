@@ -114,16 +114,14 @@ const zodFormSchema = z.object({
     .describe("How many marshmallows fit in your mouth?"),
   // Native enum example
   sports: z.nativeEnum(Sports).describe("What is your favourite sport?"),
-  guests: z.array(
-    z.object({
-      name: z.string(),
-      age: z.coerce.number().optional(),
-      location: z.object({
-        city: z.string(),
-        country: z.string().optional(),
-        test: z.object({
-          name: z.string(),
-          age: z.coerce.number(),
+  guests: z
+    .array(
+      z.object({
+        name: z.string(),
+        age: z.coerce.number().optional(),
+        location: z.object({
+          city: z.string(),
+          country: z.string().optional(),
           test: z.object({
             name: z.string(),
             age: z.coerce.number(),
@@ -133,13 +131,22 @@ const zodFormSchema = z.object({
               test: z.object({
                 name: z.string(),
                 age: z.coerce.number(),
+                test: z.object({
+                  name: z.string(),
+                  age: z.coerce.number(),
+                }),
               }),
             }),
           }),
         }),
-      }),
-    })
-  ),
+      })
+    )
+    .min(1, "minimum one guest is required")
+    .superRefine(
+      fieldConfig({
+        description: "List of guests invited to the event.",
+      })
+    ),
   // location: z.object({
   //   city: z.string(),
   //   country: z.string().optional(),

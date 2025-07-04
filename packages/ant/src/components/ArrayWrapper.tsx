@@ -35,7 +35,7 @@ export const ArrayWrapper: React.FC<ArrayWrapperProps> = ({
       </Typography.Title>
       {props.error && (
         <div
-          style={{ marginBottom: "10px", marginTop: "-10px" }}
+          style={{ marginBottom: "10px", marginTop: "-11px" }}
           id={key + "-error"}
         >
           <Typography.Text type="danger">{props.error}</Typography.Text>
@@ -43,7 +43,7 @@ export const ArrayWrapper: React.FC<ArrayWrapperProps> = ({
       )}
       {field.fieldConfig?.description && (
         <div
-          style={{ marginTop: "-10px", marginBottom: "5px" }}
+          style={{ marginTop: "-11px", marginBottom: "5px" }}
           id={key + "-description"}
         >
           <Typography.Text type="secondary" style={{ fontWeight: "normal" }}>
