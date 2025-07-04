@@ -13,7 +13,7 @@ export const ArrayWrapper: React.FC<ArrayWrapperProps> = ({
   const { key, onChange, onBlur, ref, ...props } = inputProps;
 
   return (
-    <Stack w={"full"} marginBottom={1} gapY={1}>
+    <Stack w={"full"} marginBottom={6} gapY={1}>
       <Heading
         size={"md"}
         fontWeight={"medium"}
@@ -27,14 +27,19 @@ export const ArrayWrapper: React.FC<ArrayWrapperProps> = ({
         )}
       </Heading>
       {field.fieldConfig?.description && (
-        <FieldHelperText id={key + "-description"}>
+        <FieldHelperText id={key + "-description"} mt={"-0.5"} mb={"1"}>
           {field.fieldConfig.description}
         </FieldHelperText>
       )}
       {props.error && (
         <span
           id={key + "-error"}
-          style={{ color: "#ef4444", fontSize: "12px" }}
+          style={{
+            color: "#ef4444",
+            fontSize: "12px",
+            marginTop: "-8px",
+            marginBottom: "4px",
+          }}
         >
           {props.error}
         </span>
