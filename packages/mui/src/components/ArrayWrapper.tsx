@@ -13,12 +13,13 @@ export const ArrayWrapper: React.FC<ArrayWrapperProps> = ({
   const { key, onChange, onBlur, ref, ...props } = inputProps;
 
   return (
-    <Box sx={{ mt: 2 }}>
+    <Box sx={{ mt: 2, ml: 1 }}>
       <Typography
-        variant="h6"
+        variant="subtitle1"
         ref={ref}
         tabIndex={-1}
         aria-describedby={`${key}-error ${key}-description`}
+        style={{ color: "rgba(0, 0, 0, 0.6)" }}
       >
         {label}
         {field.required && <span style={{ opacity: 0.8 }}> * </span>}

@@ -9,7 +9,7 @@ export const ObjectWrapper: React.FC<ObjectWrapperProps> = ({
 }) => {
   return (
     <Box sx={{ mt: 2 }}>
-      <Typography variant="h6">{label}</Typography>
+      <Typography variant="subtitle1">{label}</Typography>
       {field.fieldConfig?.description && (
         <FormHelperText variant="standard">
           {field.fieldConfig.description}
