@@ -1,6 +1,5 @@
 import React from "react";
 import { DatePicker } from "antd";
-import { useController } from "react-hook-form";
 import { AutoFormFieldProps } from "@autoform/react";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -8,19 +7,17 @@ import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 
 export const DateField: React.FC<AutoFormFieldProps> = ({ id, inputProps }) => {
-  const { key, onChange, onBlur, ref, ...props } = inputProps;
-  const { field: formField } = useController({ name: id });
+  const { key, ...props } = inputProps;
 
   return (
     <DatePicker
       id={id}
       key={key}
       {...props}
-      {...formField}
       style={{ width: "100%" }}
-      value={dayjs.utc(formField.value)}
+      value={dayjs.utc(props.value)}
       onChange={(date, dateString) => {
-        formField.onChange(dateString);
+        props.onChange(dateString);
       }}
       // use allowClear have bug
       allowClear={false}

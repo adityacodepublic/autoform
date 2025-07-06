@@ -1,4 +1,4 @@
-import { FieldValues } from "react-hook-form";
+import type { FieldValues } from "react-hook-form";
 import { ExtendableAutoFormProps } from "@autoform/react";
 import type { FormProps, ConfigProviderProps } from "antd";
 

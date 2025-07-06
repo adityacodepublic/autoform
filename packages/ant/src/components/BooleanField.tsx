@@ -1,7 +1,6 @@
 import React from "react";
 import { AutoFormFieldProps } from "@autoform/react";
 import { Checkbox, Typography } from "antd";
-import { useController } from "react-hook-form";
 
 export const BooleanField: React.FC<AutoFormFieldProps> = ({
   id,
@@ -10,8 +9,7 @@ export const BooleanField: React.FC<AutoFormFieldProps> = ({
   error,
   inputProps,
 }) => {
-  const { key, onChange, onBlur, ref, ...props } = inputProps;
-  const { field: formField } = useController({ name: id });
+  const { key, ...props } = inputProps;
 
   return (
     <>
@@ -19,10 +17,9 @@ export const BooleanField: React.FC<AutoFormFieldProps> = ({
         id={id}
         key={key}
         {...props}
-        {...formField}
-        checked={formField.value}
+        checked={props.value}
         onChange={(e) => {
-          formField.onChange(e.target.checked);
+          props.onChange(e.target.checked);
         }}
         style={{
           display: "flex",
