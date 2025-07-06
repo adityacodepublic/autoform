@@ -10,8 +10,7 @@ export const ArrayWrapper: React.FC<ArrayWrapperProps> = ({
   onAddItem,
   inputProps,
 }) => {
-  const { key, onChange, onBlur, ref, ...props } = inputProps;
-
+  const { key, onChange, onBlur, value, ref, ...props } = inputProps;
   return (
     <Box mt="md">
       <Text
