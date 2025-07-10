@@ -7,6 +7,7 @@ import {
   FieldConfig as BaseFieldConfig,
 } from "@autoform/core";
 import { FieldValues, UseFormReturn } from "react-hook-form";
+import { FieldReturn } from "./create-field";
 
 export interface AutoFormProps<T extends FieldValues> {
   schema: SchemaProvider<T>;
@@ -77,12 +78,12 @@ export interface ObjectWrapperProps {
 }
 
 export interface AutoFormFieldProps {
-  label: Renderable<ReactNode>;
-  field: ParsedField;
-  value: any;
-  error?: string;
-  id: string;
   path: string[];
+  id: string;
+  error?: string;
+  field: ParsedField;
+  label: Renderable<ReactNode>;
+  fieldMethods: FieldReturn;
   inputProps: any;
 }
 

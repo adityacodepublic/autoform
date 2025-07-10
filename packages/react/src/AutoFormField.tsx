@@ -1,29 +1,23 @@
 import React from "react";
-import { useFormContext } from "react-hook-form";
-import { useAutoForm } from "./context";
 import { getLabel, ParsedField } from "@autoform/core";
-import { ObjectField } from "./ObjectField";
+
+import { useAutoForm } from "./context";
+import { createField } from "./create-field";
+import { useFieldError } from "./useFieldError";
 import { ArrayField } from "./ArrayField";
+import { ObjectField } from "./ObjectField";
 import { AutoFormFieldProps } from "./types";
-import { getPathInObject } from "./utils";
 
 export const AutoFormField: React.FC<{
   field: ParsedField;
   path: string[];
 }> = ({ field, path }) => {
   const { formComponents, uiComponents } = useAutoForm();
-  const {
-    register,
-    formState: { errors },
-    getValues,
-  } = useFormContext();
+  const error = useFieldError(path);
 
   const fullPath = path.join(".");
-  const error = getPathInObject(errors, path)?.message as string | undefined;
-  const value = getValues(fullPath);
-
-  const FieldWrapper =
-    field.fieldConfig?.fieldWrapper || uiComponents.FieldWrapper;
+  const fieldConfig = field.fieldConfig;
+  const FieldWrapper = fieldConfig?.fieldWrapper || uiComponents.FieldWrapper;
 
   let FieldComponent: React.ComponentType<AutoFormFieldProps> = () => (
     <uiComponents.ErrorMessage
@@ -49,19 +43,14 @@ export const AutoFormField: React.FC<{
       field={field}
     >
       <FieldComponent
-        label={getLabel(field)}
-        field={field}
-        value={value}
-        error={error}
-        id={fullPath}
-        key={fullPath}
+        key={`${fullPath}-input`}
         path={path}
-        inputProps={{
-          error: error,
-          key: `${fullPath}-input`,
-          ...field.fieldConfig?.inputProps,
-          ...register(fullPath),
-        }}
+        id={fullPath}
+        error={error}
+        field={field}
+        label={getLabel(field)}
+        fieldMethods={createField(fullPath)}
+        inputProps={fieldConfig?.inputProps}
       />
     </FieldWrapper>
   );

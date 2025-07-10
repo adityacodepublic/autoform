@@ -74,5 +74,5 @@ export function getPathInObject(obj: any, path: string[]): any {
       return undefined;
     }
   }
-  return current;
+  return current.message ? current : (current.root ?? current);
 }
