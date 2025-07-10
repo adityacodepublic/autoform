@@ -3,21 +3,26 @@ import { TextInput } from "@mantine/core";
 import { AutoFormFieldProps } from "@autoform/react";
 
 export const StringField: React.FC<AutoFormFieldProps> = ({
-  field,
-  inputProps,
-  label,
   id,
+  label,
+  field,
+  error,
+  inputProps,
+  fieldMethods,
 }) => {
-  const { key, ...props } = inputProps;
+  const formField = fieldMethods();
 
   return (
     <TextInput
       id={id}
-      key={key}
+      key={id}
       label={label}
+      error={error}
+      {...formField}
+      {...inputProps}
+      value={formField.value ?? ""}
       withAsterisk={field.required}
       description={field.fieldConfig?.description}
-      {...props}
     />
   );
 };
