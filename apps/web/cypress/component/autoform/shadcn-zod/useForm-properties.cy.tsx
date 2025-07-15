@@ -5,7 +5,7 @@ import HookTest from "components/Hook-test";
 import { TestWrapper } from "./utils";
 import { z } from "zod";
 
-describe("React-Hook-Form useForm properties Tests", () => {
+describe("React-Hook-Form useForm properties Tests (SHADCN-ZOD)", () => {
   const fieldSchema = z.object({
     name: z
       .string({ message: "required" })

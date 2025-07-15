@@ -5,7 +5,7 @@ import HookTest from "components/Hook-test";
 import { TestWrapper } from "./utils";
 import { z } from "zod";
 
-describe("React-Hook-Form useForm properties Tests", () => {
+describe("React-Hook-Form useForm properties Tests (MANTINE-ZOD)", () => {
   const fieldSchema = z.object({
     name: z
       .string({ message: "required" })
@@ -52,7 +52,7 @@ describe("React-Hook-Form useForm properties Tests", () => {
       </TestWrapper>
     );
 
-    // formState before changes.
+    // FORMSTATE BEFORE CHANGES.
     cy.get('button[name="dirtyFields"]')
       .click()
       .should("have.attr", "data-item", "false");
@@ -66,7 +66,7 @@ describe("React-Hook-Form useForm properties Tests", () => {
       .click()
       .should("have.attr", "data-item", "false");
 
-    // type values
+    // ENTER VALUES
     cy.get('input[name="name"]').type("John Doe");
     cy.get('input[name="age"]').type("25");
     cy.get('input[name="isStudent"]').check();
@@ -77,7 +77,7 @@ describe("React-Hook-Form useForm properties Tests", () => {
       .and("be.visible")
       .click();
 
-    // check formState
+    // CHECK FORMSTATE
     cy.get('button[name="dirtyFields"]')
       .click()
       .should("have.attr", "data-item", "true");
@@ -101,29 +101,29 @@ describe("React-Hook-Form useForm properties Tests", () => {
       isStudent: true,
     });
 
-    // check watch
+    // CHECK WATCH
     cy.get('button[name="watch"]')
       .click()
       .should("have.attr", "data-item", "true");
 
-    // check reset  // named as clear due to an error
+    // CHECK RESET  // named as clear due to an error
     cy.get('button[name="clear"]')
       .click()
       .should("have.attr", "data-item", "true");
 
-    // check trigger - empty fields
+    // CHECK TRIGGER - empty fields
     cy.get('button[name="trigger"]')
       .click()
-      .should("have.attr", "data-item", "true");
+      .should("have.attr", "data-item", "false");
 
-    // check setValue
+    // CHECK SETVALUE
     cy.get('button[name="setValue"]')
       .click()
       .should("have.attr", "data-item", "true");
 
-    // check trigger - filled values
+    // CHECK TRIGGER - filled values
     cy.get('button[name="trigger"]')
       .click()
-      .should("have.attr", "data-item", "false");
+      .should("have.attr", "data-item", "true");
   });
 });

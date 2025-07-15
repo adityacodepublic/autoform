@@ -4,19 +4,29 @@ import { fieldConfig, ZodProvider } from "@autoform/zod";
 import { z } from "zod";
 import { AutoFormFieldProps } from "@autoform/react";
 import { TestWrapper } from "./utils";
+import { use } from "chai";
 
 describe("AutoForm Custom Fields Tests (MANTINE-ZOD)", () => {
   const CustomField: React.FC<AutoFormFieldProps> = ({
-    field,
     inputProps,
+    useField,
     error,
     id,
-  }) => (
-    <div>
-      <input id={id} type="text" className="custom-input" {...inputProps} />
-      {error && <span className="error">{error}</span>}
-    </div>
-  );
+  }) => {
+    const field = useField();
+    return (
+      <div>
+        <input
+          id={id}
+          type="text"
+          className="custom-input"
+          {...field}
+          {...inputProps}
+        />
+        {error && <span className="error">{error}</span>}
+      </div>
+    );
+  };
 
   const customSchema = z.object({
     customField: z

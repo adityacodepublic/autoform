@@ -4,7 +4,7 @@ import { AutoForm } from "@autoform/mui";
 import HookTest from "components/Hook-test";
 import { z } from "zod";
 
-describe("React-Hook-Form useForm properties Tests", () => {
+describe("React-Hook-Form useForm properties Tests (MUI-ZOD)", () => {
   const fieldSchema = z.object({
     name: z
       .string({ message: "required" })
@@ -90,7 +90,7 @@ describe("React-Hook-Form useForm properties Tests", () => {
       birthdate: new Date("1990-01-01"),
       isStudent: true,
     });
-    
+
     // check watch
     cy.get('button[name="watch"]')
       .click()

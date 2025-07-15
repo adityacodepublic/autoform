@@ -4,7 +4,7 @@ import { AutoForm } from "@autoform/chakra";
 import HookTest from "components/Hook-test";
 import { z } from "zod";
 
-describe("React-Hook-Form useForm properties Tests", () => {
+describe("React-Hook-Form useForm properties Tests (CHAKRA-ZOD)", () => {
   const fieldSchema = z.object({
     name: z
       .string({ message: "required" })

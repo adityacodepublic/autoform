@@ -4,7 +4,7 @@ import { AutoForm } from "@autoform/ant";
 import HookTest from "components/Hook-test";
 import { z } from "zod";
 
-describe("React-Hook-Form useForm properties Tests", () => {
+describe("React-Hook-Form useForm properties Tests (ANT-ZOD)", () => {
   const fieldSchema = z.object({
     name: z
       .string({ message: "required" })
@@ -52,26 +52,18 @@ describe("React-Hook-Form useForm properties Tests", () => {
     cy.mount(<TestForm />);
 
     // formState before changes.
-    cy.get('button[name="dirtyFields"]').click().should(
-      "have.attr",
-      "data-item",
-      "false"
-    );
-    cy.get('button[name="touchedFields"]').click().should(
-      "have.attr",
-      "data-item",
-      "false"
-    );
-    cy.get('button[name="isValid"]').click().should(
-      "have.attr",
-      "data-item",
-      "false"
-    );
-    cy.get('button[name="isSubmitSuccessful"]').click().should(
-      "have.attr",
-      "data-item",
-      "false"
-    );
+    cy.get('button[name="dirtyFields"]')
+      .click()
+      .should("have.attr", "data-item", "false");
+    cy.get('button[name="touchedFields"]')
+      .click()
+      .should("have.attr", "data-item", "false");
+    cy.get('button[name="isValid"]')
+      .click()
+      .should("have.attr", "data-item", "false");
+    cy.get('button[name="isSubmitSuccessful"]')
+      .click()
+      .should("have.attr", "data-item", "false");
 
     // type and then check state
     cy.get('input[name="name"]').type("John Doe");
