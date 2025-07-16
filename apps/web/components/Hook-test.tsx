@@ -1,6 +1,23 @@
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 
+// initialise test state
+const tests = {
+  dirtyFields: "initial",
+  touchedFields: "initial",
+  isValid: "initial",
+  isSubmitSuccessful: "initial",
+  trigger: "initial",
+  watch: "initial",
+  clear: "initial", // Renamed to "clear" to avoid conflict with HTML's reserved "reset"
+  setValue: "initial",
+  // getValue: "initial"
+  // setError and setFocus with shouldFocus
+  // clearErrors
+};
+
+const formFields = ["name", "age", "color", "birthdate", "isStudent"] as const;
+
 const HookTest = () => {
   const {
     formState: {
@@ -15,36 +32,18 @@ const HookTest = () => {
     reset,
     setValue,
   } = useFormContext();
-
-  const buttonStyle: React.CSSProperties = {
-    border: "1px solid black",
-    borderRadius: "25px",
-    padding: "5px 10px",
-    margin: "10px",
-  };
-
-  // initialise test state
-  const tests = {
-    dirtyFields: "initial",
-    touchedFields: "initial",
-    isValid: "initial",
-    isSubmitSuccessful: "initial",
-    trigger: "initial",
-    watch: "initial",
-    clear: "initial", // reset > named as clear die to conflict with reset function
-    setValue: "initial",
-    // getValue: "initial"
-    // setError and setFocus with shouldFocus 
-    // clearErrors
-  };
   const [test, setTest] = useState<typeof tests>(tests);
-  const formFields = [
-    "name",
-    "age",
-    "color",
-    "birthdate",
-    "isStudent",
-  ] as const;
+
+  function btnStyle(value: string): React.CSSProperties {
+    return {
+      backgroundColor: value === "true" ? "#C2F7C2" : "buttonface",
+      border: "1px solid black",
+      borderRadius: "25px",
+      padding: "5px 10px",
+      cursor: "pointer",
+      margin: "10px",
+    };
+  }
 
   // ------------------------------------
   // functions to test useForm-properties
@@ -129,11 +128,11 @@ const HookTest = () => {
   }
 
   async function checkTrigger() {
-    await trigger();
-    console.log("checkTrigger", errors);
+    const result = await trigger();
+    console.log("checkTrigger", result);
     setTest((prev) => ({
       ...prev,
-      trigger: String(formFields.every((key) => key in errors)),
+      trigger: String(result),
     }));
   }
 
@@ -152,6 +151,7 @@ const HookTest = () => {
     setValue("birthdate", "1990-01-01");
     setValue("isStudent", true);
     const watchValues = watch();
+    console.log("checkSetValue", watchValues);
 
     setTest((prev) => ({
       ...prev,
@@ -165,73 +165,73 @@ const HookTest = () => {
     <div>
       <button
         type="button"
-        style={buttonStyle}
         name="dirtyFields"
         onClick={checkDirtyFields}
         data-item={test.dirtyFields}
+        style={btnStyle(test.dirtyFields)}
       >
         dirtyFields
       </button>
       <button
         type="button"
-        style={buttonStyle}
         name="touchedFields"
         onClick={checkTouchedFields}
         data-item={test.touchedFields}
+        style={btnStyle(test.touchedFields)}
       >
         touchedFields
       </button>
       <button
         type="button"
-        style={buttonStyle}
         name="isValid"
         onClick={checkIsValid}
         data-item={test.isValid}
+        style={btnStyle(test.isValid)}
       >
         isValid
       </button>
       <button
         type="button"
-        style={buttonStyle}
         name="isSubmitSuccessful"
         onClick={checkIsSubmitSuccessful}
         data-item={test.isSubmitSuccessful}
+        style={btnStyle(test.isSubmitSuccessful)}
       >
         isSubmitSuccessful
       </button>
       <button
         type="button"
-        style={buttonStyle}
         name="watch"
         onClick={checkWatch}
         data-item={test.watch}
+        style={btnStyle(test.watch)}
       >
         Watch
       </button>
       <button
         type="button"
-        style={buttonStyle}
         name="clear"
         onClick={checkClear}
         data-item={test.clear}
+        style={btnStyle(test.clear)}
       >
         Clear
       </button>
       <button
         type="button"
-        style={buttonStyle}
         name="trigger"
         onClick={checkTrigger}
         data-item={test.trigger}
+        style={btnStyle(test.trigger)}
       >
         Trigger
       </button>
       <button
         type="button"
-        style={buttonStyle}
         name="setValue"
         onClick={checkSetValue}
         data-item={test.setValue}
+        style={btnStyle(test.setValue)}
       >
         SetValue
       </button>

@@ -7,10 +7,10 @@ export const BooleanField: React.FC<AutoFormFieldProps> = ({
   label,
   field,
   error,
+  useField,
   inputProps,
-  fieldMethods,
 }) => {
-  const formField = fieldMethods();
+  const formField = useField();
   return (
     <Checkbox
       key={id}

@@ -2,9 +2,10 @@
 import { Card, CardContent, Container, Typography } from "@mui/material";
 // import Ant from "../components/Ant";
 // import Chakra from "components/Chakra";
-import Mantine from "components/Mantine";
+// import Mantine from "components/Mantine";
 // import Array from "components/Array";
 // import Basics from "../components/Basics";
+import TestForm from "components/Hook-TestForm";
 
 export default function Home() {
   return (
@@ -17,10 +18,11 @@ export default function Home() {
             </Typography>
             {/* <Basics /> */}
             {/* <Array /> */}
-            <Mantine />
+            {/* <Mantine /> */}
             {/* <Shadcn /> */}
             {/* <Ant /> */}
             {/* <Chakra /> */}
+            <TestForm />
           </CardContent>
         </Card>
       </Container>

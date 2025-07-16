@@ -10,9 +10,6 @@ function Basics() {
       onSubmit={(data) => {
         console.log(JSON.stringify(data, null, 2));
       }}
-      onFormInit={(form) => {
-        console.log("Form initialized", form);
-      }}
       withSubmit
       formComponents={{
         custom: ({ field, label, inputProps }: AutoFormFieldProps) => {

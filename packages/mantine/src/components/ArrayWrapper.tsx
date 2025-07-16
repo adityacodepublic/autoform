@@ -6,6 +6,7 @@ import { ArrayWrapperProps } from "@autoform/react";
 export const ArrayWrapper: React.FC<ArrayWrapperProps> = ({
   label,
   field,
+  error,
   children,
   onAddItem,
   inputProps,
@@ -31,9 +32,9 @@ export const ArrayWrapper: React.FC<ArrayWrapperProps> = ({
           {field.fieldConfig?.description}
         </Text>
       )}
-      {props.error && (
+      {error && (
         <Text size="xs" c="red.6" id={key + "-error"}>
-          {props.error}
+          {error}
         </Text>
       )}
       {children}
