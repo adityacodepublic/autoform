@@ -1,9 +1,9 @@
 import React from "react";
 import { useFieldArray } from "react-hook-form";
+import { getLabel, ParsedField } from "@autoform/core";
 import { AutoFormField } from "./AutoFormField";
 import { useAutoForm } from "./context";
-import { getLabel, ParsedField } from "@autoform/core";
-import { useRegister } from "./create-field";
+import { useRegister } from "./utils";
 
 export const ArrayField: React.FC<{
   id: string;
@@ -13,17 +13,10 @@ export const ArrayField: React.FC<{
   error?: string | undefined;
 }> = ({ id, path, inputProps, field, error }) => {
   const { uiComponents } = useAutoForm();
-  const register = useRegister(path.join("."));
   const { fields, append, remove } = useFieldArray({
     name: path.join("."),
   });
-
-  const props = {
-    ref: register.ref,
-    key: id,
-    error: error,
-    ...inputProps,
-  };
+  const ref = useRegister(path.join(".")).ref;
 
   const subFieldType = field.schema?.[0]?.type;
   let defaultValue: any;
@@ -37,8 +30,13 @@ export const ArrayField: React.FC<{
 
   return (
     <uiComponents.ArrayWrapper
+      error={error}
       field={field}
-      inputProps={props}
+      inputProps={{
+        key: `${id}-input`,
+        ...inputProps,
+        ref: ref,
+      }}
       label={getLabel(field)}
       onAddItem={() => append(defaultValue)}
     >

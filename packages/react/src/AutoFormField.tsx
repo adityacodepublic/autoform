@@ -2,7 +2,7 @@ import React from "react";
 import { getLabel, ParsedField } from "@autoform/core";
 
 import { useAutoForm } from "./context";
-import { createField } from "./create-field";
+import { createField } from "./utils";
 import { useFieldError } from "./useFieldError";
 import { ArrayField } from "./ArrayField";
 import { ObjectField } from "./ObjectField";
@@ -49,7 +49,7 @@ export const AutoFormField: React.FC<{
         error={error}
         field={field}
         label={getLabel(field)}
-        fieldMethods={createField(fullPath)}
+        useField={createField(fullPath)}
         inputProps={fieldConfig?.inputProps}
       />
     </FieldWrapper>

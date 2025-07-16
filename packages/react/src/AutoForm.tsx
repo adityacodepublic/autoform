@@ -1,81 +1,69 @@
-import { FormEventHandler, useCallback, useEffect } from "react";
 import {
   useForm,
+  FieldValues,
   FormProvider,
-  Resolver,
-  DefaultValues,
-  ResolverResult,
-  ResolverOptions,
+  UseFormProps,
+  SubmitHandler,
   SubmitErrorHandler,
+  Resolver,
+  ResolverOptions,
+  ResolverResult,
+  DefaultValues,
 } from "react-hook-form";
 import {
-  parseSchema,
   getDefaultValues,
-  focusError,
+  parseSchema,
   replaceEmptyValue,
 } from "@autoform/core";
 import { AutoFormProps } from "./types";
 import { AutoFormProvider } from "./context";
 import { AutoFormField } from "./AutoFormField";
+import { focusError, preventPropagation } from "./utils";
 
-export function AutoForm<T extends Record<string, any>>({
+export function AutoForm<T extends FieldValues = FieldValues>({
+  form,
   schema,
   onSubmit = () => {},
-  defaultValues,
   values,
+  defaultValues,
   children,
   uiComponents,
   formComponents,
   withSubmit = false,
-  onFormInit = () => {},
   formProps = {},
 }: AutoFormProps<T>) {
+  const shouldFocusError = form?.shouldFocusError !== false;
+  const { ref, ...restFormProps } = formProps;
   const parsedSchema = parseSchema(schema);
 
-  const resolver: Resolver<T> = useCallback(
-    async (
-      values: T,
-      ctx: any,
-      options: ResolverOptions<T>
-    ): Promise<ResolverResult<T>> => {
-      const cleanedValues = replaceEmptyValue(values);
+  const resolver: Resolver<T> = async (
+    values: T,
+    ctx: any,
+    options: ResolverOptions<T>
+  ): Promise<ResolverResult<T>> => {
+    const cleanedValues = replaceEmptyValue(values);
+    return schema.resolver(cleanedValues, ctx, options);
+  };
 
-      //const validation = schema.validateSchema(cleanedValues as T);
-      console.log("resolver input", { values, cleanedValues });
-      console.log(
-        "resolver result",
-        await schema.resolver(cleanedValues, ctx, options)
-      );
-
-      return schema.resolver(cleanedValues, ctx, options);
-    },
-    [schema]
-  );
-
-  const methods = useForm<T>({
+  const methods = useForm<T, any, T>({
+    formControl: form?.formControl as UseFormProps<T>["formControl"],
     defaultValues: {
       ...(getDefaultValues(schema) as Partial<T>),
       ...defaultValues,
     } as DefaultValues<T>,
-    values: values as T,
     shouldFocusError: false,
-    reValidateMode: "onSubmit",
+    values: values as T,
     resolver,
   });
 
-  useEffect(() => {
-    if (onFormInit) {
-      onFormInit(methods);
-    }
-  }, [onFormInit, methods]);
-
-  const onError: SubmitErrorHandler<T> = (errors) => {
-    console.log("errors -->", errors);
-    console.log("errors2", focusError(errors));
+  const handleSubmit: SubmitHandler<T> = async (data: T, e) => {
+    await onSubmit(data, methods, e);
   };
 
-  const handleSubmit = async (data: T) => {
-    await onSubmit(data, methods);
+  const handleError: SubmitErrorHandler<T> = (errors) => {
+    if (shouldFocusError) {
+      focusError(errors);
+    }
   };
 
   return (
@@ -88,8 +76,11 @@ export function AutoForm<T extends Record<string, any>>({
         }}
       >
         <uiComponents.Form
-          onSubmit={methods.handleSubmit(handleSubmit, onError)}
-          {...formProps}
+          onSubmit={preventPropagation(
+            methods.handleSubmit(handleSubmit, handleError)
+          )}
+          ref={formProps?.ref}
+          {...restFormProps}
         >
           {parsedSchema.fields.map((field) => (
             <AutoFormField key={field.key} field={field} path={[field.key]} />

@@ -3,27 +3,31 @@ import {
   ParsedField,
   ParsedSchema,
   Renderable,
-  SchemaProvider,
   FieldConfig as BaseFieldConfig,
+  SchemaProvider,
 } from "@autoform/core";
-import { FieldValues, UseFormReturn } from "react-hook-form";
-import { FieldReturn } from "./create-field";
+import {
+  FieldPath,
+  FieldValues,
+  UseControllerProps,
+  UseFormReturn,
+} from "react-hook-form";
+import { createForm } from "./utils";
 
-export interface AutoFormProps<T extends FieldValues> {
+export interface AutoFormProps<T extends FieldValues = FieldValues> {
   schema: SchemaProvider<T>;
+  form?: ReturnType<typeof createForm>;
   onSubmit?: (
     values: T,
-    form: UseFormReturn<T, any, T>
+    form: UseFormReturn<T, any, T>,
+    e?: React.BaseSyntheticEvent
   ) => void | Promise<void>;
-
   defaultValues?: Partial<T>;
   values?: Partial<T>;
-
   children?: ReactNode;
   uiComponents: AutoFormUIComponents;
   formComponents: AutoFormFieldComponents;
   withSubmit?: boolean;
-  onFormInit?: (form: UseFormReturn<T, any, T>) => void;
   formProps?: React.ComponentProps<"form"> | Record<string, any>;
 }
 
@@ -59,10 +63,11 @@ export interface FieldWrapperProps {
 
 export interface ArrayWrapperProps {
   label: Renderable<ReactNode>;
-  onAddItem: () => void;
+  error?: Renderable<ReactNode>;
   children: ReactNode;
-  field: ParsedField;
   inputProps: any;
+  field: ParsedField;
+  onAddItem: () => void;
 }
 
 export interface ArrayElementWrapperProps {
@@ -83,7 +88,7 @@ export interface AutoFormFieldProps {
   error?: string;
   field: ParsedField;
   label: Renderable<ReactNode>;
-  fieldMethods: FieldReturn;
+  useField: FieldReturn;
   inputProps: any;
 }
 
@@ -102,3 +107,22 @@ export type FieldConfig<
   React.ComponentType<FieldWrapperProps>,
   CustomData
 >;
+
+export type FieldReturn<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+  TTransformedValues = TFieldValues,
+> = (
+  props?: Omit<
+    UseControllerProps<TFieldValues, TName, TTransformedValues>,
+    "name"
+  >
+) => {
+  [key: string]: any;
+  onChange: (...event: any[]) => void;
+  onBlur: () => void;
+  value: any;
+  disabled?: boolean;
+  name: TName;
+  ref: (instance: any) => void;
+};

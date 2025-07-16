@@ -83,26 +83,6 @@ export function replaceEmptyValue<T extends Record<string, any>>(values: T): T {
 }
 
 /**
- * Recursively focuses the first and deepest input element with an error, if found.
- */
-export function focusError(errors: Record<string, any>): boolean {
-  if (!errors || typeof errors !== "object") return false;
-
-  if (typeof errors?.ref?.focus === "function") {
-    errors.ref.focus();
-    return true;
-  }
-
-  for (const val of Object.values(errors)) {
-    if (typeof val === "object") {
-      if (focusError(val)) return true;
-    }
-  }
-
-  return false;
-}
-
-/**
  * Sort the fields by order.
  * If no order is set, the field will be sorted based on the order in the schema.
  */
