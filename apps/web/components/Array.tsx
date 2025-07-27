@@ -10,7 +10,7 @@ const schemaProvider = new ZodProvider(formSchema);
 
 function Array() {
   const [values, setValues] = useState<Partial<z.infer<typeof formSchema>>>({
-    guest: "John Doe",
+    guest: "John Do",
   });
 
   return (
