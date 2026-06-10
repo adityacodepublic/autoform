@@ -389,6 +389,7 @@ For deeper details, read these reference files in the `references/` directory:
 - `references/installation.md` — Full installation matrix for every UI + schema combination
 - `references/schema-providers.md` — Complete Zod, Yup, and Joi schema configuration (labels, enums, arrays, sub-objects, fieldConfig)
 - `references/shadcn.md` — shadcn/ui registry integration, CLI commands, component anatomy, and all available example blocks
+- `references/shadcn-tailwind-installation.md` — shadcn/ui and tailwind installation from scratch
 - `references/form-control.md` — All patterns for accessing form data (onSubmit, useFormContext, createFormControl)
 - `references/custom-integration.md` — Building a custom UI integration from scratch
 - `references/customization.md` — fieldConfig, custom fields, UI component overrides, form element customization

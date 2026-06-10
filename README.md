@@ -10,6 +10,16 @@ Check out the [AutoForm documentation](https://autoform-acp-docs.vercel.app) for
 
 ---
 
+## (optional) AutoForm Skill
+
+If you use AI coding assistants (such as Cursor, Claude Code, Opencode, or GitHub Copilot), you can install the AutoForm skill, it gives your coding agent access to AutoForm-specific documentation, examples, and best practices.
+
+```bash
+npx skills add https://github.com/adityacodepublic/autoform/tree/acp-package/skills --skill autoform
+```
+
+---
+
 What is AutoForm? Let's say you have a zod schema that you already use for your backend:
 
 ```ts
