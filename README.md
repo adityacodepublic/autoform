@@ -10,7 +10,7 @@ Check out the [AutoForm documentation](https://autoform-acp-docs.vercel.app) for
 
 ---
 
-## (optional) AutoForm Skill
+## AutoForm Skill (optional)
 
 If you use AI coding assistants (such as Cursor, Claude Code, Opencode, or GitHub Copilot), you can install the AutoForm skill, it gives your coding agent access to AutoForm-specific documentation, examples, and best practices.
 
