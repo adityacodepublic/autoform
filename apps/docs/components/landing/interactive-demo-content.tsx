@@ -62,6 +62,7 @@ function InteractiveDemoContent() {
 
   useEffect(() => {
     try {
+      // @ts-ignore
       const z = globalZod;
       const parsedSchema = eval(code);
       const provider = new ZodProvider(parsedSchema);

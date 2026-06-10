@@ -64,7 +64,7 @@ export default function InteractiveSchemaDemoContent() {
 
   useEffect(() => {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // @ts-ignore
       const z = globalZod;
       const parsedSchema = eval(code); // Warning: eval is unsafe. Do not use with untrusted input.
       const provider = new ZodProvider(parsedSchema);
