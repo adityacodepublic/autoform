@@ -16,7 +16,7 @@ When you only need the data after a successful submission, pass an `onSubmit` ha
     // form is the react-hook-form instance (UseFormReturn)
     form.reset();
   }}
-  withSubmit
+  withSubmit // Adds the default submit button
 />
 ```
 
