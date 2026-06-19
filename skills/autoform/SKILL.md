@@ -1,6 +1,6 @@
 ---
 name: autoform
-description: How to use the @acp-autoform/* packages to automatically generate React forms from Zod, Yup, or Joi schemas with any UI library (shadcn/ui, MUI, Mantine, Ant Design, Chakra UI). Use this skill whenever the user wants to create a form from a schema, build forms with custom field components, set up fieldConfig for label/description/inputProps/fieldType, create multi-step forms, nest AutoForm instances, customize AutoForm UI components or field wrappers. Trigger this skill even when the user just mentions "autoform", "auto form", "auto-form", "acp-autoform", "schema-driven form", or "generate form from schema".
+description: How to use the @acp-autoform/* packages to automatically generate React forms from Zod, Yup, or Joi schemas with any UI library (shadcn/ui, MUI, Mantine, Ant Design, Chakra UI). Use this skill whenever the user wants to create a form from a schema, build forms with custom field components, set up fieldConfig for label/description/inputProps/fieldType, create multi-step forms, nest AutoForm instances, customize AutoForm UI components, or customize field/object/array wrappers. Trigger this skill even when the user just mentions "autoform", "auto form", "auto-form", "acp-autoform", "schema-driven form", or "generate form from schema".
 ---
 
 # @acp-autoform — Schema-Driven Form Generation
@@ -23,7 +23,7 @@ AutoForm is a **four-layer** system. Understanding the layers prevents import er
 shadcn registry (copy-paste components via CLI)
 ```
 
-**Key rule**: Import `AutoForm` from the **UI package** (e.g. `@acp-autoform/mui`) or from `components/ui/autoform` in case of `shadcn`, import `fieldConfig` and `SchemaProvider` from the **schema package** (e.g. `@acp-autoform/zod`). Import types like `AutoFormFieldProps` from `@acp-autoform/react`.
+**Key rule**: Import `AutoForm` from the **UI package** (e.g. `@acp-autoform/mui`) or from `components/ui/autoform` in case of `shadcn`, import `fieldConfig` and `SchemaProvider` from the **schema package** (e.g. `@acp-autoform/zod`). Import types like `AutoFormFieldProps`, `FieldWrapperProps`, `ObjectWrapperProps`, `ArrayWrapperProps`, and `ArrayElementWrapperProps` from `@acp-autoform/react`.
 
 ---
 
@@ -45,7 +45,7 @@ Read `references/installation.md` for the full installation matrix. The summary:
 
 ### shadcn/ui (registry-based, no npm package)
 
-(Make sure you have shadcn and and tailwind initialised in your project, see `references\shadcn-tailwind-installation` for shadcn installation from scratch.)
+(Make sure you have shadcn/ui and Tailwind initialized in your project, see `references\shadcn-tailwind-installation` for shadcn installation from scratch.)
 
 ```bash
 npx shadcn@latest add https://raw.githubusercontent.com/adityacodepublic/autoform/refs/heads/acp-package/packages/shadcn/registry/autoform.json
@@ -93,7 +93,7 @@ import { AutoForm } from "@acp-autoform/mui"; // or your UI package
 const schema = z.object({
   name: z.string(),
   age: z.coerce.number(), // use coerce for numbers
-  birthday: z.date(), // use coerce for dates
+  birthday: z.date(),
   email: z.string().email(),
 });
 const schemaProvider = new ZodProvider(schema);
@@ -123,7 +123,7 @@ export default function MyForm() {
 | `formControl`    | `FormControl`                 | External form control from `createFormControl()`                          |
 | `onFormInit`     | `(form) => void`              | **Deprecated.** Use `formControl` instead                                 |
 | `formComponents` | `Record<string, Component>`   | Map field types to custom input components                                |
-| `uiComponents`   | `object`                      | Override structural UI pieces (FieldWrapper, Form, etc.)                  |
+| `uiComponents`   | `object`                      | Override structural UI pieces (Form, FieldWrapper, ObjectWrapper, etc.)   |
 | `formProps`      | `object`                      | Extra props for the `<form>` element                                      |
 | `children`       | `ReactNode`                   | Rendered below the form fields                                            |
 
@@ -133,27 +133,27 @@ export default function MyForm() {
 
 Each schema library has its own provider class and its own `fieldConfig` attachment method. Read `references/schema-providers.md` for full details. Summary:
 
-| Library                 | Provider                  | fieldConfig attachment             | Requires              |
-| ----------------------- | ------------------------- | ---------------------------------- | --------------------- |
-| **Zod v4**,**Zod Mini** | `new ZodProvider(schema)` | `.check(fieldConfig({...}))`       | `zod ^3.25.0 \|\| ^4` |
-| **Zod v3**              | `new ZodProvider(schema)` | `.superRefine(fieldConfig({...}))` | `zod ^3.25.0`         |
-| **Yup**                 | `new YupProvider(schema)` | `.transform(fieldConfig({...}))`   | `yup`                 |
-| **Joi**                 | `new JoiProvider(schema)` | `.meta(fieldConfig({...}))`        | `joi`                 |
+| Library                  | Provider                  | fieldConfig attachment             | Requires              |
+| ------------------------ | ------------------------- | ---------------------------------- | --------------------- |
+| **Zod v4**, **Zod Mini** | `new ZodProvider(schema)` | `.check(fieldConfig({...}))`       | `zod ^3.25.0 \|\| ^4` |
+| **Zod v3**               | `new ZodProvider(schema)` | `.superRefine(fieldConfig({...}))` | `zod ^3.25.0`         |
+| **Yup**                  | `new YupProvider(schema)` | `.transform(fieldConfig({...}))`   | `yup`                 |
+| **Joi**                  | `new JoiProvider(schema)` | `.meta(fieldConfig({...}))`        | `joi`                 |
 
 ### Critical schema rules
 
 - **Numbers**: Always use `z.coerce.number()` (Zod), not `z.number()` — HTML inputs return strings.
-- **Dates**: Always use `z.date()` (Zod).
+- **Dates**: Use `z.date()` for Zod date fields.
 - **Enums/Select**: Use `z.enum([...])` or `z.nativeEnum(...)` for Zod, `mixed().oneOf(...)` for Yup, `Joi.any().valid(...)` for Joi.
 - **Arrays**: Supported as fields (array cannot be a root schema).
-- **Optional**: Use `.optional()` for (Zod). Skip `.required()` for (Yup/Joi).
+- **Optional**: Use `.optional()` for Zod. Skip `.required()` for Yup/Joi.
 - **Default**: `.default(value)` is a validation fallback. For pre-filled values the user can clear, use the `defaultValues` prop instead.
 
 ---
 
 ## fieldConfig — Customizing Fields
 
-`fieldConfig` is how you customize labels, descriptions, input props, and field types **inside the schema**. Import it from your schema package.
+`fieldConfig` is how you customize labels, descriptions, input props, field types, wrappers, and per-field metadata **inside the schema**. Import it from your schema package.
 
 ```tsx
 import { fieldConfig } from "@acp-autoform/zod";
@@ -184,7 +184,7 @@ const schema = z.object({
     ),
   bio: z.string().check(
     fieldConfig<React.ReactNode, FieldTypes>({
-      fieldType: "textarea", // route to a different custom created form component
+      fieldType: "textarea", // route to a custom form component
     }),
   ),
   priority: z.string().check(
@@ -201,23 +201,41 @@ const schema = z.object({
 });
 ```
 
+### Customization routing
+
+- `inputProps`: same input, different props such as placeholder, disabled, rows, min/max, className, or aria props.
+- `fieldType` + `formComponents`: replace the actual value editor for any field type, including object and array fields. Use this for picker modals, search selectors, uploads, rich editors, map pickers, or multi-card selectors. The custom component can render anything, but it must write a value shape that matches the schema.
+- `fieldWrapper`: keep the field component, change the shell around one field, such as label/error layout, conditional visibility, badges, help text, or spacing.
+- `objectWrapper`: keep generated child fields, change the shell around an object group, such as fieldset, card, accordion, section heading, or grouped layout.
+- `arrayWrapper`: keep generated array item fields, change the shell around the whole array, such as add button, empty state, toolbar, array-level label/error, or list layout.
+- `arrayElementWrapper`: keep generated item fields, change the shell around each array item, such as remove button, item card, numbering, accordion item, or item actions.
+- `uiComponents`: apply structural UI overrides globally.
+- `fieldConfig`: apply wrapper, input, field type, or metadata overrides to one schema field. Field config overrides win over `uiComponents` passed to AutoForm.
+
+Rule of thumb: use `fieldType` and custom components when you want to replace how a value is edited; use wrappers when AutoForm should keep editing the value but you want to change the surrounding UI.
+
 ### Available fieldConfig options
 
-| Option         | Type        | Purpose                                        |
-| -------------- | ----------- | ---------------------------------------------- |
-| `label`        | `string`    | Override the auto-generated label              |
-| `description`  | `ReactNode` | Helper text below the field                    |
-| `inputProps`   | `object`    | Props spread onto the input element            |
-| `fieldType`    | `string`    | Route to a custom `formComponents` entry       |
-| `order`        | `number`    | Display order (lower = earlier, default 0)     |
-| `fieldWrapper` | `Component` | Per-field wrapper override                     |
-| `customData`   | `object`    | Arbitrary data accessible in custom components |
+| Option                | Type        | Purpose                                        |
+| --------------------- | ----------- | ---------------------------------------------- |
+| `label`               | `string`    | Override the auto-generated label              |
+| `description`         | `ReactNode` | Helper text below the field                    |
+| `inputProps`          | `object`    | Props spread onto the input element            |
+| `fieldType`           | `string`    | Route to a custom `formComponents` entry       |
+| `order`               | `number`    | Display order (lower = earlier, default 0)     |
+| `fieldWrapper`        | `Component` | Per-field wrapper override                     |
+| `objectWrapper`       | `Component` | Per-object-field wrapper override              |
+| `arrayWrapper`        | `Component` | Per-array-field wrapper override               |
+| `arrayElementWrapper` | `Component` | Per-array-item wrapper override                |
+| `customData`          | `object`    | Arbitrary data accessible in custom components |
 
 ---
 
 ## Custom Field Components
 
-Register custom inputs via `formComponents` and route fields to them with `fieldConfig({ fieldType: "..." })`.
+Register custom value editors via `formComponents` and route fields to them with `fieldConfig({ fieldType: "..." })`.
+
+Custom field components can replace the editor for scalar, object, or array fields. This is the right choice when wrappers are not enough, for example a modal selector, async search picker, file uploader, or multi-card selector for an array field. The component can render anything internally, but it must write the exact value shape expected by the schema in the onChange handler.
 
 ```tsx
 // 1. Create the component — use useController hook from react-hook-form for RHF binding
@@ -244,7 +262,10 @@ const schema = z.object({
 });
 ```
 
-**Important**: Form components should NOT render labels or errors — `FieldWrapper` handles those. Only render the actual input control.
+**Important**:
+
+- Most form components should not render labels or errors because `FieldWrapper` handles those. If you dont want FieldWrapper you can override it with a wrapper that only returns `children` .
+- If a custom component replaces an entire object or array editor, it may own more UI, but it still must write schema-compatible values through React Hook Form.
 
 ---
 
@@ -260,8 +281,7 @@ The full set of overridable UI components:
 - `ArrayWrapper` — wraps array fields with add-item button
 - `ArrayElementWrapper` — wraps each array item with remove button
 
-Override structural components globally via `uiComponents`,
-FieldWrapper can be overridden per field via `fieldConfig({ fieldWrapper: ... })`.
+Override structural components globally via `uiComponents`. Override `FieldWrapper`, `ObjectWrapper`, `ArrayWrapper`, and `ArrayElementWrapper` per field via `fieldConfig`. Use wrappers only when AutoForm should still render the field contents; use `fieldType` when replacing the value editor itself.
 
 ```tsx
 <AutoForm
@@ -356,6 +376,10 @@ Use a separate schema per step, validate with `trigger()`, collect values with `
 
 Create a custom field component that renders a second `<AutoForm>`. On inner submit, pass the value back via `onChange`.
 
+### Custom object/array editor
+
+When customization to object or array wrapper is not enough for your usecase eg: custom value editor, such as a modal picker or async multi-select. Then use `fieldType` + `formComponents`. The custom component must write the exact object/array shape expected by the schema.
+
 ### Real-time validation
 
 Pass `createFormControl({ mode: "all" })` and check `isValid` from `useFormContext`.
@@ -378,7 +402,8 @@ Use `useWatch` + `useFormContext` inside custom field components or wrappers. Us
 4. **Rendering label/error in custom form components** — `FieldWrapper` already handles this.
 5. **Using `.superRefine(fieldConfig(...))` with Zod v4** — use `.check(fieldConfig(...))` instead.
 6. **Arrays as root schema** — arrays must be fields inside an object schema.
-7. **Forgetting Zod version ≥ 3.25.0** for `@acp-autoform/zod`.
+7. **Using wrappers to replace the value editor** — use `fieldType` + `formComponents` when the component must own the field value.
+8. **Forgetting Zod version ≥ 3.25.0** for `@acp-autoform/zod`.
 
 ---
 

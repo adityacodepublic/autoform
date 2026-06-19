@@ -70,6 +70,8 @@ Create a new folder called `src/components` and implement the required UI compon
 
 You can take a look at existing implementations like "@acp-autoform/mui" for inspiration. Here's an example of how to implement these components with pure HTML:
 
+`FieldWrapper`, `ObjectWrapper`, `ArrayWrapper`, and `ArrayElementWrapper` can later be overridden per field with `fieldConfig({ fieldWrapper, objectWrapper, arrayWrapper, arrayElementWrapper })`, so keep their props compatible with the exported wrapper prop types.
+
 ```tsx
 // src/components/Form.tsx
 import React from "react";

@@ -98,7 +98,7 @@ const formSchema = z.object({
         },
       }),
     ),
-  birthday: z.coerce.date({ message: "aaa" }).optional(),
+  birthday: z.date().optional(),
 
   nameId: z
     .enum(Object.keys(nameId) as [string, ...string[]], {
@@ -130,9 +130,9 @@ username: z.string().describe("Your username"),
 someValue: z.string(), // → "Some Value"
 ```
 
-### Coercion (CRITICAL)
+### Coercion
 
-HTML inputs return strings. Always use `z.coerce` for non-string types:
+HTML inputs return strings. Use `z.coerce.number()` for number fields:
 
 ```tsx
 favouriteNumber: z.coerce.number(),
@@ -233,7 +233,7 @@ Provide generic type parameters for full type safety:
 import { FieldTypes } from "@acp-autoform/mui";
 
 z.string().check(
-  fieldConfig<React.ReactNode, FieldTypes, any, { isImportant?: boolean }>({
+  fieldConfig<React.ReactNode, FieldTypes, { isImportant?: boolean }>({
     inputProps: { type: "password" },
     customData: { isImportant: true },
   }),

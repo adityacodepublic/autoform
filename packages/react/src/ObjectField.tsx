@@ -9,11 +9,11 @@ export const ObjectField: React.FC<{
 }> = ({ path, parsedField }) => {
   const { uiComponents } = useAutoForm();
 
+  const ObjectWrapper =
+    parsedField.fieldConfig?.objectWrapper || uiComponents.ObjectWrapper;
+
   return (
-    <uiComponents.ObjectWrapper
-      label={getLabel(parsedField)}
-      parsedField={parsedField}
-    >
+    <ObjectWrapper label={getLabel(parsedField)} parsedField={parsedField}>
       {Object.entries(parsedField.schema!).map(([_key, subField]) => (
         <AutoFormField
           key={`${path.join(".")}.${subField.key}`}
@@ -21,6 +21,6 @@ export const ObjectField: React.FC<{
           path={[...path, subField.key]}
         />
       ))}
-    </uiComponents.ObjectWrapper>
+    </ObjectWrapper>
   );
 };

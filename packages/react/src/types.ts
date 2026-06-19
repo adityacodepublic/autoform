@@ -6,13 +6,7 @@ import {
   FieldConfig as BaseFieldConfig,
   SchemaProvider,
 } from "@acp-autoform/core";
-import {
-  createFormControl,
-  FieldPath,
-  FieldValues,
-  UseControllerProps,
-  UseFormReturn,
-} from "react-hook-form";
+import { createFormControl, FieldValues, UseFormReturn } from "react-hook-form";
 
 export type { FieldValues } from "react-hook-form";
 
@@ -162,9 +156,16 @@ export interface AutoFormContextType {
 export type FieldConfig<
   FieldTypes = string,
   CustomData = Record<string, any>,
+  FieldWrapper = React.ComponentType<FieldWrapperProps>,
+  ObjectWrapper = React.ComponentType<ObjectWrapperProps>,
+  ArrayWrapper = React.ComponentType<ArrayWrapperProps>,
+  ArrayElementWrapper = React.ComponentType<ArrayElementWrapperProps>,
 > = BaseFieldConfig<
   ReactNode,
   FieldTypes,
-  React.ComponentType<FieldWrapperProps>,
-  CustomData
+  CustomData,
+  FieldWrapper,
+  ObjectWrapper,
+  ArrayWrapper,
+  ArrayElementWrapper
 >;

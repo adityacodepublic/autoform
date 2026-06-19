@@ -37,7 +37,7 @@ const formSchema = z.object({
     // You can add additional config for how to render this field
     // using fieldConfig
     .check(
-      fieldConfig<React.ReactNode, FieldTypes, any, { isImportant?: boolean }>({
+      fieldConfig<React.ReactNode, FieldTypes, { isImportant?: boolean }>({
         description: "We recommend to use a strong password.",
         inputProps: {
           type: "password",
@@ -338,7 +338,7 @@ import { FieldTypes } from "@acp-autoform/mui";
 import { fieldConfig } from "@acp-autoform/zod";
 
 z.string().check(
-  fieldConfig<React.ReactNode, FieldTypes, any, { isImportant?: boolean }>({
+  fieldConfig<React.ReactNode, FieldTypes, { isImportant?: boolean }>({
     inputProps: {
       type: "password",
     },

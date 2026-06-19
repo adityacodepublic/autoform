@@ -2,12 +2,10 @@ import { SchemaProvider, replaceEmptyValue } from "@acp-autoform/core";
 import React from "react";
 
 import {
-  FieldPath,
   FieldValues,
   Resolver,
   ResolverOptions,
   ResolverResult,
-  useController,
   useFormContext,
   UseFormRegister,
 } from "react-hook-form";
