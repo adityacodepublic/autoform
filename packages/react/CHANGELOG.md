@@ -1,5 +1,20 @@
 # @acp-autoform/react
 
+## 6.0.0
+
+### Major Changes
+
+- 9b94fca: Add per-field structural wrapper overrides for object, array, and array item fields.
+
+  `fieldConfig` now supports `objectWrapper`, `arrayWrapper`, and `arrayElementWrapper` in addition to `fieldWrapper`. The React renderer prefers field-level wrappers over global `uiComponents`, allowing individual object and array fields to customize their generated layout without replacing the value editor.
+
+  The `FieldConfig` generic order now places `CustomData` before wrapper component generics so common custom metadata typing can use `fieldConfig<React.ReactNode, FieldTypes, CustomData>`.
+
+### Patch Changes
+
+- Updated dependencies [9b94fca]
+  - @acp-autoform/core@4.0.0
+
 ## 5.0.0
 
 ### Major Changes
