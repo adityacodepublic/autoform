@@ -46,15 +46,18 @@ const ControlledForm = () => {
   );
 };
 
-const minLengthResolver: Resolver<{ name: string }> = async (values) =>
-  values.name?.length >= 5
-    ? { values, errors: {} }
-    : {
-        values: {},
-        errors: {
-          name: { type: "minLength", message: "Custom resolver: min 5" },
-        },
-      };
+const minLengthResolver: Resolver<{ name: string }> = async (values) => {
+  if (values.name?.length >= 5) {
+    return { values, errors: {} };
+  }
+
+  return {
+    values: {},
+    errors: {
+      name: { type: "minLength", message: "Custom resolver: min 5" },
+    },
+  };
+};
 
 const CustomResolverForm = () => {
   const schemaProvider = new ZodProvider(z.object({ name: z.string() }));
